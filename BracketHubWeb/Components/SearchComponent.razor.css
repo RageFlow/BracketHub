@@ -3,20 +3,19 @@
     padding: 0.5rem;
     background-color: var(--background-gray-1);
     border-radius: var(--border-radius);
-    width: 300px;
+    width: 320px;
     position: relative;
     display: flex;
     align-items: center;
     gap: 0.25rem;
     cursor: text;
-}
 
-    .input-search-container svg {
+    svg {
         opacity: 0.7;
         font-size: 1.0rem;
     }
 
-    .input-search-container input {
+    input {
         flex-grow: 1;
         border: none;
         outline: none;
@@ -25,34 +24,58 @@
         font-size: 1rem;
     }
 
-        .input-search-container input::-webkit-search-cancel-button {
+        input::-webkit-search-cancel-button {
             position: relative;
             -webkit-appearance: none;
             height: 20px;
             width: 20px;
         }
 
-        .input-search-container input::-webkit-input-placeholder {
+        input::-webkit-input-placeholder {
             color: var(--text-muted);
             opacity: 0.7;
             transition: 0.1s ease-in-out;
         }
 
-        .input-search-container input:hover::-webkit-input-placeholder {
+        input:hover::-webkit-input-placeholder {
             opacity: 0.4;
         }
-        
-        .input-search-container input:focus::-webkit-input-placeholder {
+
+        input:focus::-webkit-input-placeholder {
             opacity: 0;
         }
 
-    .input-search-container button {
+    div button {
         position: absolute;
-        right: 0.25rem;
-        padding: 0.35rem 0.25rem 0.25rem 0.1rem;
-        background: none;
-        opacity: 0.7;
-        color: var(--text-muted);
-        border: none;
+        top: 0;
+        right: 56px;
+        bottom: 0;
         cursor: pointer;
+        height: calc(100% - 10px);
+        margin: 5px;
     }
+
+    div:last-of-type button {
+        right: 0;
+    }
+
+    .input-clear {
+        width: 25px;
+
+        button {
+            padding: 0 0.25rem;
+            background: none;
+            opacity: 0.7;
+            color: var(--text-muted);
+            border: none;
+        }
+    }
+
+    .input-submit {
+        width: 40px;
+
+        button {
+            padding: 0 0.75rem;
+        }
+    }
+}

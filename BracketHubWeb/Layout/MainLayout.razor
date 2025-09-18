@@ -1,5 +1,4 @@
-﻿@using BracketHubWeb.Services
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 <div class="page">
 
     <NavMenu />
@@ -14,9 +13,6 @@
 </div>
 
 @code{
-    [Inject]
-    protected GameService? GameService { get; set; }
-
     [CascadingParameter]
     public RouteData? RouteData { get; set; }
 

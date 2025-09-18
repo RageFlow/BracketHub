@@ -1,7 +1,17 @@
 ﻿@inherits GamePage
+@page "/game/{Type}"
+
+<PageTitle>@type</PageTitle>
+
+<div class="page-background" style="@BackgroundUrlStyle">
+	<div></div>
+</div>
 
 <h3>Dashboard</h3>
+<p>@type</p>
+
+
 
 @code {
-
+	public static string NavigateMe(string type) => $"/game/{type}";
 }

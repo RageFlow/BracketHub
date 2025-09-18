@@ -32,11 +32,14 @@ html, body {
     }
 
 .loading-progress {
-    position: relative;
+    position: absolute;
     display: block;
+    top: 40%;
+    right: 50%;
+    left: 50%;
+    bottom: 50%;
     width: 8rem;
     height: 3rem;
-    margin: 30vh auto 1rem auto;
 }
 
     .loading-progress .loading-swirve-1,
@@ -57,12 +60,18 @@ html, body {
 
 .loading-progress-text {
     position: absolute;
+    display: block;
+    top: calc(40% - 20px);
+    right: 50%;
+    left: 50%;
+    bottom: 50%;
+    width: 8rem;
+    height: 3rem;
     text-align: center;
     font-weight: bold;
     color: #e0e0e0;
-    inset: calc(30vh - 1.5rem) 0 auto 0;
 }
 
     .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "__________");
+        content: var(--blazor-load-percentage-text, "_________");
     }

@@ -1,4 +1,4 @@
-﻿@using BracketHubWeb.Components
+﻿@using BracketHubWeb.Models
 
 <div class="header-container">
     @* PC *@
@@ -12,20 +12,29 @@
         </div>
 
         <nav>
+            @if (GameService.Type.IsNotNull())
+            {
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="@Dashboard.NavigateMe(GameService.Type)" title="@GameService.Name">
+                        <img src="@GameModelStatics.IconUrl(GameService.Type)" />
+                        @GameService.Type
+                    </NavLink>
+                </div>
+            }
             <div class="nav-item">
-                <NavLink class="nav-link" href="counter">
-                    Counter
+                <NavLink class="nav-link" href="Counter">
+                    Games
                 </NavLink>
             </div>
             <div class="nav-item">
-                <NavLink class="nav-link" href="weather">
-                    Weather
+                <NavLink class="nav-link" href="Weather">
+                    Popular
                 </NavLink>
             </div>
         </nav>
 
         <div class="nav-functions">
-            <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="SearchForValue" />
+            <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="Search" />
 
             <button @onclick="Login">Login</button>
         </div>
@@ -78,18 +87,13 @@
 
         <nav>
             <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <NavLink class="nav-link" href="Counter">
+                    Games
                 </NavLink>
             </div>
             <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="counter">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-                </NavLink>
-            </div>
-            <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="weather">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                <NavLink class="nav-link" href="Weather">
+                    Popular
                 </NavLink>
             </div>
         </nav>
@@ -101,20 +105,18 @@
     protected IJSRuntime? JS { get; set; }
 
     #region
-    [Inject]
-    protected GameService? GameService { get; set; }
     protected override void OnInitialized()
     {
         GameService.ThrowIfNull();
-        GameService.GameChanged += CheckGameType;
+        GameService.GameChanged += Checktype;
+        Checktype(this, GameService.Type);
+
         base.OnInitialized();
     }
 
-    private string? GameType { get; set; }
-
-    private void CheckGameType(object? sender, string? value)
+    private void Checktype(object? sender, string? value)
     {
-        GameType = value;
+        StateHasChanged();
     }
     #endregion
 
@@ -151,10 +153,9 @@
 
     #endregion
 
-    private void SearchForValue(string value)
+    private void Search(string args)
     {
-        JS.ThrowIfNull();
-        JS.InvokeVoidAsync("alert", value);
+        GameService.Search(args);
     }
 
     private void Login()

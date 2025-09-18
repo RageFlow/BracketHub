@@ -1,12 +1,50 @@
 ﻿@page "/"
+@using BracketHubWeb.Models
 
 <PageTitle>Home</PageTitle>
 
+
 <div class="page-background">
-    <img src="images/hero-bg.webp" />
     <div></div>
 </div>
-<div class="page-home-container">
-    <h4>Tournaments the easy way!</h4>
+
+<div class="page-home-top-section" page-restrict="true">
+    <h2>Tournaments the easy way!</h2>
+    <div style="width: 100%;">
+        <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="Search" ShowSearchButton="true" Style="max-width: calc(100% - 2rem); width: 500px; padding: 1rem; margin: 0 auto;" />
+    </div>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 </div>
+
+<div class="page-home-game-grid" page-restrict="true">
+    <h3>Popular Games</h3>
+    <div class="game-grid">
+        @foreach (var item in GameModelStatics.GameList)
+        {
+            <a href="@Dashboard.NavigateMe(item.Type)" class="game-item">
+                <img src="@GameModelStatics.CoverUrl(item.Type)" />
+                <span>@item.Name</span>
+            </a>
+        }
+    </div>
+</div>
+
+<div class="page-home-game-grid" page-restrict="true">
+    <h3>Popular Tournaments</h3>
+    <div class="tournament-grid">
+        @foreach (var item in GameModelStatics.GameList)
+        {
+            <a href="@Dashboard.NavigateMe(item.Type)" class="game-item">
+                <img src="@GameModelStatics.CoverUrl(item.Type)" />
+                <span>@item.Name</span>
+            </a>
+        }
+    </div>
+</div>
+
+@code {
+    private void Search(string args)
+    {
+        GameService.Search(args);
+    }
+}
