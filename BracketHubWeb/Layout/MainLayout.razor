@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using BracketHubWeb.Services
+@inherits LayoutComponentBase
 <div class="page">
 
     <NavMenu />
@@ -11,3 +12,23 @@
 
     </main>
 </div>
+
+@code{
+    [Inject]
+    protected GameService? GameService { get; set; }
+
+    [CascadingParameter]
+    public RouteData? RouteData { get; set; }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue(nameof(RouteData), out RouteData? routedata))
+        {
+            routedata.ThrowIfNull();
+            GameService.ThrowIfNull();
+            GameService.CheckRoute(routedata);
+        }
+        
+        return base.SetParametersAsync(parameters);
+    }
+}

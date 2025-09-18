@@ -100,6 +100,24 @@
     [Inject]
     protected IJSRuntime? JS { get; set; }
 
+    #region
+    [Inject]
+    protected GameService? GameService { get; set; }
+    protected override void OnInitialized()
+    {
+        GameService.ThrowIfNull();
+        GameService.GameChanged += CheckGameType;
+        base.OnInitialized();
+    }
+
+    private string? GameType { get; set; }
+
+    private void CheckGameType(object? sender, string? value)
+    {
+        GameType = value;
+    }
+    #endregion
+
     #region Menu
     private bool mobileMenuInitialized = false;
 
