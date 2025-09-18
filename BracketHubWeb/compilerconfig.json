@@ -1,0 +1,9 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/MainSheet.css",
+    "inputFile": "Theme/MainSheet.scss",
+    "minify": {
+      "enabled": false
+    }
+  }
+]

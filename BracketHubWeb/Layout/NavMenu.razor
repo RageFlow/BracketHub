@@ -1,39 +1,146 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">BracketHubWeb</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿@using BracketHubWeb.Components
+
+<div class="header-container">
+    @* PC *@
+    <div class="nav-container" device-type="PC">
+
+        <div class="nav-title">
+            <a class="title-logo" href="">
+                <span>Bracket</span>
+                <span>Hub</span>
+            </a>
+        </div>
+
+        <nav>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="counter">
+                    Counter
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="weather">
+                    Weather
+                </NavLink>
+            </div>
+        </nav>
+
+        <div class="nav-functions">
+            <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="SearchForValue" />
+
+            <button @onclick="Login">Login</button>
+        </div>
+    </div>
+
+    @* Mobile *@
+    <div class="nav-container" device-type="Mobile">
+        <nav>
+            <button title="Navigation menu" class="nav-item" @onclick="ToggleNavMenu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </nav>
+
+        <div class="nav-title">
+            <a class="title-logo" href="">
+                <span>Bracket</span>
+                <span>Hub</span>
+            </a>
+        </div>
+
+        <div class="nav-functions">
+            <button>
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+            <button @onclick="Login">
+                <i class="fa-solid fa-user"></i>
+            </button>
+        </div>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
+@if (mobileMenuInitialized)
+{
+    @* Mobile menu blocker *@
+    <div class="@NavMenuCssClass nav-mobile-menu-blocker" device-type="Mobile" @onclick="ToggleNavMenu"></div>
+
+    @* Mobile inner menu *@
+    <div class="@NavMenuCssClass nav-mobile-menu" device-type="Mobile">
+
+        <div class="nav-title">
+            <a class="title-logo" href="">
+                <span>Bracket</span>
+                <span>Hub</span>
+            </a>
+            <button @onclick="ToggleNavMenu">
+                <i class="fa-solid fa-x"></i>
+            </button>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+
+        <nav>
+            <div class="nav-item" @onclick="ToggleNavMenu">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item" @onclick="ToggleNavMenu">
+                <NavLink class="nav-link" href="counter">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                </NavLink>
+            </div>
+            <div class="nav-item" @onclick="ToggleNavMenu">
+                <NavLink class="nav-link" href="weather">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+}
 
 @code {
+    [Inject]
+    protected IJSRuntime? JS { get; set; }
+
+    #region Menu
+    private bool mobileMenuInitialized = false;
+
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
+    private Task? checkTask = null;
+
+    private async Task ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        if (checkTask == null)
+        {
+            if (!mobileMenuInitialized)
+                mobileMenuInitialized = true;
+
+            collapseNavMenu = !collapseNavMenu;
+            checkTask = CheckMenu();
+            await checkTask;
+        }
+    }
+    private async Task CheckMenu()
+    {
+        await Task.Delay(200);
+        if (collapseNavMenu)
+        {
+            mobileMenuInitialized = false;
+        }
+        checkTask = null;
+    }
+
+    #endregion
+
+    private void SearchForValue(string value)
+    {
+        JS.ThrowIfNull();
+        JS.InvokeVoidAsync("alert", value);
+    }
+
+    private void Login()
+    {
+
     }
 }

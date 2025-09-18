@@ -1,0 +1,79 @@
+﻿:root {
+    --page-max-size: 1500px;
+    --color-back-1: rgb(1, 3, 8);
+    --color-back-2: rgb(0, 13, 53);
+    --background-muted: rgba(224, 224, 224, 0.4);
+    --background-gray-1: #252525;
+    --text-muted: rgb(224, 224, 224);
+    --text-size-1: 0.75rem;
+    --text-size-2: 1rem;
+    --text-size-3: 1.25rem;
+    --text-size-4: 1.5rem;
+    --border-radius: 4px;
+}
+
+// 0.25rem = 4px
+// 0.5rem  = 8px
+// 0.75rem = 12px
+// 1.0rem  = 16px
+// 1.25rem = 20px
+// 1.5rem  = 24px
+// 1.75rem = 28px
+
+html {
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(45deg, var(--color-back-2), var(--color-back-1));
+    color: var(--text-muted);
+}
+
+body {
+    margin: 0;    
+}
+
+#app {
+    height: 100vh;
+
+    .page, main {
+        height: 100%;
+    }
+    main {
+        overflow: auto;
+    }
+    .content{
+        position: relative;
+        overflow-x: hidden;
+        margin-top: var(--nav-height);
+        min-height: calc(100% - var(--nav-height));
+    }
+}
+
+main {
+    max-width: var(--page-max-size);
+    margin: 0 auto;
+    min-height: 100%;
+}
+
+a, button {
+    border-radius: var(--border-radius);
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+button {
+    height: 36px;
+    padding: 0 1rem;
+    /*background: none;*/
+    /*border: 1px solid var(--background-muted);*/
+    background: var(--background-gray-1);
+    border: none;
+    transition: 0.2s ease-in-out;
+    will-change: background;
+
+    &:hover {
+        background: var(--background-muted);
+    }
+}
+
+@import "NavMenu.scss";

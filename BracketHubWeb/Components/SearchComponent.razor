@@ -1,0 +1,49 @@
+﻿<div class="input-search-container" @onclick="Focus">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" placeholder="@Placeholder" @bind="value" @bind:event="oninput" @onkeydown="KeyPress" id="@guid" />
+    <button @onclick="Clear" @onclick:stopPropagation="true" style="@style"><i class="fa-solid fa-x"></i></button>
+</div>
+
+@code {
+    [Inject]
+    protected IJSRuntime? JS { get; set; }
+
+    [Parameter]
+    public string? Placeholder { get; set; } = "Search";
+
+    [Parameter]
+    public EventCallback<string> ValueEntered { get; set; }
+
+    private Guid guid = Guid.NewGuid();
+
+    private string? value { get; set; }
+
+    private string? style => isEmpty ? "display:none" : "";
+
+    private bool isEmpty => string.IsNullOrEmpty(value);
+
+    private void Clear()
+    {
+        value = string.Empty;
+        StateHasChanged();
+    }
+
+    private void Focus()
+    {
+        if (JS.IsNotNull())
+        {
+            JS.InvokeVoidAsync("focus", guid);
+        }
+    }
+
+    private void KeyPress(KeyboardEventArgs e)
+    {
+        if (isEmpty)
+            return;
+
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            ValueEntered.InvokeAsync(value);
+        }
+    }
+}

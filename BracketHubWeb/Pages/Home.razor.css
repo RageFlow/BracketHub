@@ -1,0 +1,26 @@
+﻿
+
+.page-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    display: flex;
+    justify-content: center;
+
+    img {
+        width: calc(var(--page-max-size) + 50px);
+    }
+
+    div {
+        position: absolute;
+        top: 0;
+        right: auto;
+        bottom: 0;
+        left: auto;
+        width: 100%;
+        background: red;
+        opacity: 0.5;
+    }
+}
