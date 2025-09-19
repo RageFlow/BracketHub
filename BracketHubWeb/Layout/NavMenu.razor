@@ -16,18 +16,20 @@
             {
                 <div class="nav-item">
                     <NavLink class="nav-link" href="@Dashboard.NavigateMe(GameService.Type)" title="@GameService.Name">
-                        <img src="@GameModelStatics.IconUrl(GameService.Type)" />
-                        @GameService.Type
+                        <object data="@GameModelStatics.IconUrl(GameService.Type)" type="image/png">
+                            <img src="/images/icons/default-icon.jpg" alt="">
+                        </object>
+                        @* @GameService.Type *@
                     </NavLink>
                 </div>
             }
             <div class="nav-item">
-                <NavLink class="nav-link" href="Counter">
+                <NavLink class="nav-link" href="/games">
                     Games
                 </NavLink>
             </div>
             <div class="nav-item">
-                <NavLink class="nav-link" href="Weather">
+                <NavLink class="nav-link" href="">
                     Popular
                 </NavLink>
             </div>
@@ -87,12 +89,12 @@
 
         <nav>
             <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="Counter">
+                <NavLink class="nav-link" href="/games">
                     Games
                 </NavLink>
             </div>
             <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="Weather">
+                <NavLink class="nav-link" href="">
                     Popular
                 </NavLink>
             </div>

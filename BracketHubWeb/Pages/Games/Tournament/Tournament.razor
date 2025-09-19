@@ -1,0 +1,11 @@
+﻿@inherits TournamentPage
+@page "/games/{Type}/{Id}"
+
+<PageTitle>@Type</PageTitle>
+
+<h2>@Type</h2>
+<h2>@Id</h2>
+
+@code {
+	public static string NavigateMe(string type, string? id) => $"/games/{type}/{id ?? "Unknown"}";
+}

@@ -1,4 +1,9 @@
-﻿:root {
+﻿
+@import "NavMenu.scss";
+@import "TournamentGrid.scss";
+@import "GamesGrid.scss";
+
+:root {
     --page-max-size: 1300px;
     --color-back-1: rgb(1, 3, 8);
     --color-back-2: rgb(0, 13, 53);
@@ -9,6 +14,7 @@
     --text-size-2: 1rem;
     --text-size-3: 1.25rem;
     --text-size-4: 1.5rem;
+    --text-size-5: 1.75rem;
     --border-radius: 4px;
 }
 
@@ -105,4 +111,31 @@ button {
     mask-composite: intersect;
 }
 
-@import "NavMenu.scss";
+.page-top-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5rem;
+    margin-top: 6rem;
+
+    > div {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        h2 {
+            margin: 0;
+            text-align: center;
+            font-size: var(--text-size-5);
+        }
+
+        img, object {
+            width: 3rem;
+            aspect-ratio: 1;
+            border-radius: var(--border-radius);
+        }
+    }
+
+    .tournament-item-icon {
+    }
+}

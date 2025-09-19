@@ -1,0 +1,95 @@
+﻿
+.page-tournament-grid {
+    h3 {
+        font-size: var(--text-size-4);
+    }
+
+    .tournament-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+
+        .tournament-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            transition: .2s ease-in-out;
+            background: rgba(50,50,50,0.8);
+            opacity: 1;
+
+            &:hover {
+                /*box-shadow: blue 0px 0px 15px 0px;*/
+                opacity: 0.8;
+            }
+
+            .tournament-item-top {
+                position: relative;
+                display: flex;
+
+                .tournament-item-banner {
+                    border-radius: var(--border-radius) var(--border-radius) 0 0;
+                    width: 100%;
+                    aspect-ratio: 3 / 1;
+                    object-fit: cover;
+                }
+
+                .tournament-item-name {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    transform: translateY(-50%);
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: var(--text-size-4);
+                    text-shadow: 0 0 14px black;
+                    transition: .2s opacity ease-in-out;
+                    opacity: 0;
+                }
+
+                &:hover {
+                    .tournament-item-name {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .tournament-item-icon {
+                position: absolute;
+                top: 0.25rem;
+                left: 0.25rem;
+                width: 10%;
+                aspect-ratio: 1;
+                border-radius: var(--border-radius);
+            }
+
+                .tournament-item-banner img,
+                .tournament-item-icon img {
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .tournament-item-inner {
+                padding: 0.5rem;
+                border-radius: 0 0 var(--border-radius) var(--border-radius);
+                display: flex;
+                gap: 1rem;
+
+                .tournament-item-inner-image {
+                    width: 4rem;
+                    height: 4rem;
+                    background: rgba(0,0,0,0.2);
+                    border-radius: var(--border-radius);
+                }
+
+                .tournament-item-inner-data {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}

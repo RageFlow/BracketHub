@@ -1,0 +1,28 @@
+﻿@using BracketHubWeb.Models
+
+<div class="page-game-grid" page-restrict="true" style="@Style">
+    <h3>@Title</h3>
+    <div class="game-grid">
+        @foreach (var item in Games)
+        {
+            <a href="@Dashboard.NavigateMe(item.Type)" class="game-item">
+                <img src="@GameModelStatics.CoverUrl(item.Type)" />
+                <span>@item.Name</span>
+            </a>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; } = "Games";
+
+    [Parameter]
+    public List<GameModel> Games { get; set; } = new();
+
+    // [Parameter]
+    // public bool IsGamePage { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+}

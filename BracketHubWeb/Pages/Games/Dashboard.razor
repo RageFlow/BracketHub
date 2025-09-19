@@ -1,17 +1,24 @@
 ﻿@inherits GamePage
-@page "/game/{Type}"
+@page "/games/{Type}"
+@using BracketHubWeb.Models
 
-<PageTitle>@type</PageTitle>
+<PageTitle>@Type</PageTitle>
 
 <div class="page-background" style="@BackgroundUrlStyle">
 	<div></div>
 </div>
 
-<h3>Dashboard</h3>
-<p>@type</p>
+<div class="page-top-section" page-restrict="true">
+	<div>
+		<object class="tournament-item-icon" data="@GameModelStatics.IconUrl(GameService.Type)" type="image/png">
+			<img src="/images/icons/default-icon.jpg" alt="">
+		</object>
+		<h2>@GameService.Game?.Name</h2>
+	</div>
+</div>
 
-
+<TournamentGridComponent Title="Tournaments" IsGamePage="true" Tournaments="SimpleTournamentModelStatics.TournamentList.Where(x => x.Type == Type).ToList()" />
 
 @code {
-	public static string NavigateMe(string type) => $"/game/{type}";
+	public static string NavigateMe(string type) => $"/games/{type}";
 }

@@ -1,0 +1,19 @@
+﻿@using BracketHubWeb.Models
+@page "/games"
+
+<div class="page-background" style="@BackgroundUrlStyle">
+	<div></div>
+</div>
+
+<div class="page-top-section" page-restrict="true">
+	<div>
+		<h2>Games</h2>
+	</div>
+</div>
+
+<GamesGridComponent Title="" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
+
+
+@code {
+	protected string BackgroundUrlStyle => $"height: 60vh; opacity: 0.6; background-image: url({GameModelStatics.BannerUrl("Fortnite")}), url(images/CS2-Capture.PNG);";
+}

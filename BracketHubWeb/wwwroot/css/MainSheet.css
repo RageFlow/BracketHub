@@ -1,100 +1,4 @@
-﻿:root {
-  --page-max-size: 1300px;
-  --color-back-1: rgb(1, 3, 8);
-  --color-back-2: rgb(0, 13, 53);
-  --background-muted: rgba(224, 224, 224, 0.4);
-  --background-gray-1: #252525;
-  --text-muted: rgb(224, 224, 224);
-  --text-size-1: 0.75rem;
-  --text-size-2: 1rem;
-  --text-size-3: 1.25rem;
-  --text-size-4: 1.5rem;
-  --border-radius: 4px;
-}
-
-html {
-  height: 100vh;
-  width: 100vw;
-  background: linear-gradient(45deg, var(--color-back-2), var(--color-back-1));
-  color: var(--text-muted);
-  color-scheme: dark;
-}
-
-html, body {
-  margin: 0;
-}
-
-[page-restrict=true] {
-  max-width: var(--page-max-size);
-  margin: 0 auto;
-}
-
-#app, .page, main, .content {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-#app {
-  height: 100vh;
-}
-#app .page {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-#app .page main {
-  overflow: auto;
-  height: 100%;
-}
-#app .page main .content {
-  position: relative;
-  min-height: calc(100% - var(--nav-height));
-  padding: 0 1rem;
-}
-
-a, button {
-  border-radius: var(--border-radius);
-  color: var(--text-muted);
-  cursor: pointer;
-  text-decoration: none;
-}
-
-button {
-  height: 36px;
-  padding: 0 1rem;
-  /*background: none;*/
-  /*border: 1px solid var(--background-muted);*/
-  background: var(--background-gray-1);
-  border: none;
-  transition: 0.2s ease-in-out;
-  will-change: background;
-}
-button:hover {
-  background: var(--background-muted);
-}
-
-.page-background {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: auto;
-  left: 0;
-  max-width: 1500px;
-  margin: 0 auto;
-  height: 30vh;
-  min-height: 400px;
-  z-index: -1;
-  background-image: url(../../images/CS2-Capture.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
-  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 255, 106) 20%, rgb(0, 255, 106) 80%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgb(0, 255, 106) 20%, rgb(0, 255, 106) 80%, rgba(0, 0, 0, 0) 100%);
-  mask-composite: intersect;
-}
-
-@media screen and (min-width: 1024px) {
+﻿@media screen and (min-width: 1024px) {
   [device-type=Mobile] {
     display: none !important;
   }
@@ -145,7 +49,7 @@ button:hover {
 .header-container .nav-container nav a:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
-.header-container .nav-container nav a img {
+.header-container .nav-container nav a img, .header-container .nav-container nav a object {
   width: 32px;
   height: 32px;
   border-radius: var(--border-radius);
@@ -288,4 +192,237 @@ button:hover {
   flex-grow: 1;
   padding: 1.5rem 2rem;
   font-size: var(--text-size-3);
+}
+
+.page-tournament-grid h3 {
+  font-size: var(--text-size-4);
+}
+.page-tournament-grid .tournament-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+.page-tournament-grid .tournament-grid .tournament-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  transition: 0.2s ease-in-out;
+  background: rgba(50, 50, 50, 0.8);
+  opacity: 1;
+}
+.page-tournament-grid .tournament-grid .tournament-item:hover {
+  /*box-shadow: blue 0px 0px 15px 0px;*/
+  opacity: 0.8;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-top {
+  position: relative;
+  display: flex;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-top .tournament-item-banner {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  width: 100%;
+  aspect-ratio: 3/1;
+  object-fit: cover;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-top .tournament-item-name {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
+  font-weight: bold;
+  font-size: var(--text-size-4);
+  text-shadow: 0 0 14px black;
+  transition: 0.2s opacity ease-in-out;
+  opacity: 0;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-top:hover .tournament-item-name {
+  opacity: 1;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-icon {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 10%;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius);
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-banner img,
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-icon img {
+  width: 100%;
+  height: 100%;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-inner {
+  padding: 0.5rem;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  display: flex;
+  gap: 1rem;
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-inner .tournament-item-inner-image {
+  width: 4rem;
+  height: 4rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+}
+.page-tournament-grid .tournament-grid .tournament-item .tournament-item-inner .tournament-item-inner-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.page-game-grid h3 {
+  font-size: var(--text-size-4);
+}
+.page-game-grid .game-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.page-game-grid .game-grid .game-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  z-index: 1;
+}
+.page-game-grid .game-grid .game-item img {
+  border-radius: var(--border-radius);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.2s ease-in-out;
+  transform-style: preserve-3d;
+  box-shadow: none;
+}
+.page-game-grid .game-grid .game-item:hover img {
+  transform: perspective(1000px) rotateX(10deg) translateZ(10px) scale(103%);
+  box-shadow: #333333 0px 3px 15px 0px;
+}
+.page-game-grid .game-grid .game-item span {
+  font-size: var(--text-size-1);
+  flex-shrink: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+:root {
+  --page-max-size: 1300px;
+  --color-back-1: rgb(1, 3, 8);
+  --color-back-2: rgb(0, 13, 53);
+  --background-muted: rgba(224, 224, 224, 0.4);
+  --background-gray-1: #252525;
+  --text-muted: rgb(224, 224, 224);
+  --text-size-1: 0.75rem;
+  --text-size-2: 1rem;
+  --text-size-3: 1.25rem;
+  --text-size-4: 1.5rem;
+  --text-size-5: 1.75rem;
+  --border-radius: 4px;
+}
+
+html {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(45deg, var(--color-back-2), var(--color-back-1));
+  color: var(--text-muted);
+  color-scheme: dark;
+}
+
+html, body {
+  margin: 0;
+}
+
+[page-restrict=true] {
+  max-width: var(--page-max-size);
+  margin: 0 auto;
+}
+
+#app, .page, main, .content {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#app {
+  height: 100vh;
+}
+#app .page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#app .page main {
+  overflow: auto;
+  height: 100%;
+}
+#app .page main .content {
+  position: relative;
+  min-height: calc(100% - var(--nav-height));
+  padding: 0 1rem;
+}
+
+a, button {
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button {
+  height: 36px;
+  padding: 0 1rem;
+  /*background: none;*/
+  /*border: 1px solid var(--background-muted);*/
+  background: var(--background-gray-1);
+  border: none;
+  transition: 0.2s ease-in-out;
+  will-change: background;
+}
+button:hover {
+  background: var(--background-muted);
+}
+
+.page-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  max-width: 1500px;
+  margin: 0 auto;
+  height: 30vh;
+  min-height: 400px;
+  z-index: -1;
+  background-image: url(../../images/CS2-Capture.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 255, 106) 20%, rgb(0, 255, 106) 80%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgb(0, 255, 106) 20%, rgb(0, 255, 106) 80%, rgba(0, 0, 0, 0) 100%);
+  mask-composite: intersect;
+}
+
+.page-top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5rem;
+  margin-top: 6rem;
+}
+.page-top-section > div {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.page-top-section > div h2 {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-size-5);
+}
+.page-top-section > div img, .page-top-section > div object {
+  width: 3rem;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius);
 }

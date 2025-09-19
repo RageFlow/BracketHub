@@ -16,31 +16,9 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 </div>
 
-<div class="page-home-game-grid" page-restrict="true">
-    <h3>Popular Games</h3>
-    <div class="game-grid">
-        @foreach (var item in GameModelStatics.GameList)
-        {
-            <a href="@Dashboard.NavigateMe(item.Type)" class="game-item">
-                <img src="@GameModelStatics.CoverUrl(item.Type)" />
-                <span>@item.Name</span>
-            </a>
-        }
-    </div>
-</div>
+<GamesGridComponent Title="Popular Games" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
 
-<div class="page-home-game-grid" page-restrict="true">
-    <h3>Popular Tournaments</h3>
-    <div class="tournament-grid">
-        @foreach (var item in GameModelStatics.GameList)
-        {
-            <a href="@Dashboard.NavigateMe(item.Type)" class="game-item">
-                <img src="@GameModelStatics.CoverUrl(item.Type)" />
-                <span>@item.Name</span>
-            </a>
-        }
-    </div>
-</div>
+<TournamentGridComponent Title="Popular Tournaments" Tournaments="SimpleTournamentModelStatics.TournamentList" IsGamePage="false" Style="margin-bottom: 6rem;" />
 
 @code {
     private void Search(string args)

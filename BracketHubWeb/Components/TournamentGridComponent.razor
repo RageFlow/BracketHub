@@ -1,0 +1,53 @@
+﻿@using BracketHubWeb.Models
+
+<div class="page-tournament-grid" page-restrict="true" style="@Style">
+    <h3>@Title</h3>
+    <div class="tournament-grid">
+        @foreach (var item in Tournaments)
+        {
+            <a href="@Tournament.NavigateMe(item.Type, item.Id)" class="tournament-item">
+
+                <div class="tournament-item-top">
+                    <object class="tournament-item-banner" data="@GameModelStatics.BannerUrl(item.Type)" type="image/png">
+                        <img src="/images/banners/fortnite-banner.jpg" alt="">
+                    </object>
+
+                    @if (!IsGamePage)
+                    {
+                        <span class="tournament-item-name">@GameModelStatics.Name(item.Type)</span>
+                    }
+                </div>
+
+                @if (!IsGamePage)
+                {
+                    <object class="tournament-item-icon" data="@GameModelStatics.IconUrl(item.Type)" type="image/png">
+                        <img src="/images/icons/default-icon.jpg" alt="">
+                    </object>
+                }
+
+                <div class="tournament-item-inner">
+                    <div class="tournament-item-inner-image">
+                    </div>
+                    <div class="tournament-item-inner-data">
+                        <span>@item.Name</span>
+                        <span>@item.Date.ToString("MMM dd, yyyy")</span>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; } = "Tournaments";
+
+    [Parameter]
+    public List<SimpleTournamentModel> Tournaments { get; set; } = new();
+
+    [Parameter]
+    public bool IsGamePage { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+}

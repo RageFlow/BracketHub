@@ -21,6 +21,8 @@ namespace BracketHubWeb.Models
         public static string CoverUrl(string? type) => $"images/covers/{type ?? "default" }-cover.jpg";
         public static string IconUrl(string? type) => $"images/icons/{type ?? "default"}-icon.jpg";
         public static string BackgroundUrl(string? type) => $"images/backgrounds/{type ?? "default"}-background.jpg";
+        public static string BannerUrl(string? type) => $"images/banners/{type ?? "default"}-banner.jpg";
+        public static string? Name(string? type) => GameList.FirstOrDefault(x => x.Type == type)?.Name;
 
         public static List<GameModel> GameList = new()
         {
