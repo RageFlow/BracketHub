@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace BracketHubWeb.Extensions
+namespace BracketHubShared.Extensions
 {
     public static class NullExtensions
     {

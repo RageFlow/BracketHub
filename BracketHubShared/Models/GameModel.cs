@@ -1,6 +1,6 @@
 ﻿using System.Security.AccessControl;
 
-namespace BracketHubWeb.Models
+namespace BracketHubShared.Models
 {
     public class GameModel
     {

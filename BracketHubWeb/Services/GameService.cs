@@ -1,7 +1,6 @@
-﻿using BracketHubWeb.Extensions;
-using BracketHubWeb.Models;
+﻿using BracketHubShared.Extensions;
+using BracketHubShared.Models;
 using BracketHubWeb.Pages.Games;
-using BracketHubWeb.Pages.Games.Tournament;
 using Microsoft.AspNetCore.Components;
 
 namespace BracketHubWeb.Services

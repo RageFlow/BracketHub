@@ -1,6 +1,6 @@
-﻿using BracketHubWeb.Extensions;
+﻿using BracketHubShared.Extensions;
 
-namespace BracketHubWeb.Models
+namespace BracketHubShared.Models
 {
     public class AdvancedTournamentModel : TournamentModel
     {

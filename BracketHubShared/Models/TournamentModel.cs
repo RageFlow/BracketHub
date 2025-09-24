@@ -1,6 +1,6 @@
 ﻿using BracketHubShared.Enums;
 
-namespace BracketHubWeb.Models
+namespace BracketHubShared.Models
 {
     public class TournamentModel
     {

@@ -1,5 +1,4 @@
-﻿@using BracketHubWeb.Models
-
+﻿
 <div class="page-tournament-grid" page-restrict="true" style="@Style" restricted-size="@IsGamePage">
     <h3>@Title</h3>
     <div class="tournament-grid">
@@ -28,7 +27,7 @@
                     <div class="tournament-item-inner-data">
                         <span>@item.Name</span>
                         <div>
-                            <span>@item.Date.ToString("MMM dd, yyyy")</span>
+                            <span>@item.Date?.ToString("MMM dd, yyyy")</span>
                         </div>
                     </div>
                 </div>
