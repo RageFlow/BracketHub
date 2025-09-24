@@ -4,9 +4,7 @@
 <PageTitle>Home</PageTitle>
 
 
-<div class="page-background">
-    <div></div>
-</div>
+<div class="page-background"></div>
 
 <div class="page-home-top-section" page-restrict="true">
     <h2>Tournaments the easy way!</h2>
@@ -16,9 +14,9 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 </div>
 
-<GamesGridComponent Title="Popular Games" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
+<GamesGridComponent Title="Popular Games" Games="@GameModelStatics.GameList.Take(12).ToList()" Style="margin-bottom: 6rem;" />
 
-<TournamentGridComponent Title="Popular Tournaments" Tournaments="SimpleTournamentModelStatics.TournamentList" IsGamePage="false" Style="margin-bottom: 6rem;" />
+<TournamentGridComponent Title="Popular Tournaments" Tournaments="BaseTournamentModelStatics.TournamentList.Take(9).ToList()" IsGamePage="false" Style="margin-bottom: 6rem;" />
 
 @code {
     private void Search(string args)

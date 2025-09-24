@@ -1,0 +1,162 @@
+﻿
+
+<div class="bracket-component" page-restrict="true">
+	@* <div class="bracket-component-header">
+		<h3>@Tournament?.Name</h3>
+	</div> *@
+	<div class="bracket-component-view" id="tournament-bracket-@Tournament?.Id">
+		@if (GroupedMatches.IsNotNull())
+		{
+			@foreach (var group in GroupedMatches)
+			{
+				var matches = group.ToList();
+
+				<div class="bracket" round-number="@group.Key">
+					<div class="bracket-header">
+						<span>Round @group.Key</span>
+					</div>
+					<div class="bracket-list">
+						@for (int i = 0; i < matches.Count; i++)
+						{
+							var match = matches[i];
+
+							<div class="round-match" single-team="@(match.Members?.Count() <= 1)" match-winner="@match.Winner">
+
+								@if (match.Members.IsNotNull())
+								{
+									foreach (var member in match.Members)
+									{
+										MemberModel model = GetMember(member);
+										<a class="@(match.Winner == member ? "winner" : match.Winner != null ? "loser" : string.Empty) tournament-member tournament-@Tournament?.Id-@model.Id" member-id="@model.Id" onmouseover="highlightMember(@Tournament?.Id, @model.Id)" onmouseleave="unhighlightMember(@Tournament?.Id)">
+											<span>@model.Name</span>
+										</a>
+									}
+								}
+
+								@if (matches.Count != 1)
+								{
+									<div class="exit @GetElevation(i + 1, i + 1 == matches.Count)" single-team="@(match.Members?.Count() <= 1)">
+										<div class="entry @GetElevation(i+1, i+1 == matches.Count)"></div>
+									</div>
+								}
+
+								@if (Debug)
+								{
+									<div style="z-index: 2; position: absolute; top: -10px; left: 0;">
+										<span style="margin-right: 10px">@match.Id</span>
+										<span>@match.MatchNumber</span>
+									</div>
+									<div style="z-index: 2; position: absolute; top: -10px; right: 0;">
+										@if (match.ParentMatchess.IsNotNull())
+										{
+											foreach (var item in match.ParentMatchess)
+											{
+												<span style="margin-right: 10px">@item</span>
+											}
+										}
+									</div>
+								}
+							</div>
+						}
+					</div>
+				</div>
+			}
+		}
+	</div>
+</div>
+
+
+@code {
+	private bool Debug = false;
+
+	[Parameter]
+	public AdvancedTournamentModel? Tournament { get; set; }
+
+	private List<MatchModel>? Matches { get; set; }
+
+	private IEnumerable<IGrouping<int, MatchModel>>? GroupedMatches { get; set; }
+
+	private Dictionary<int, MemberModel>? MemberList = new();
+
+
+	private string GetElevation(int num, bool overrideCom = false)
+	{
+		return overrideCom ? "up" : num % 2 == 0 ? "up" : "down";
+	}
+
+	private MemberModel GetMember(int? id)
+	{
+		if (MemberList.IsNotNull() && id.IsNotNull() && MemberList.TryGetValue(id.Value, out MemberModel? value))
+		{
+			return value;
+		}
+		return new MemberModel((int)Team.TBD, Team.TBD.ToString());
+	}
+
+	protected override void OnInitialized()
+	{
+		if (Tournament.IsNotNull() && Tournament.Matches.IsNotNull())
+		{
+			Matches = Tournament.Matches;
+
+			MemberList = Tournament.Members?.ToDictionary(x => x.Id);
+		}
+
+		if (Matches.IsNotNull())
+		{
+			CheckNext(Matches, 1);
+
+			GroupedMatches = Matches.OrderBy(x => x.MatchNumber).GroupBy(x => x.Round);
+		}
+
+		base.OnInitialized();
+	}
+
+	private void CheckNext(List<MatchModel> matches, int round, int? maxNum = null)
+	{
+		var currentMatches = matches.Where(x => x.Round == round).OrderBy(x => x.MatchNumber).ToList();
+
+		maxNum ??= currentMatches.Where(x => x.MatchNumber.IsNotNull()).Select(x => x.MatchNumber).Max();
+
+		if (currentMatches.Count <= 1)
+			return;
+
+		int nextRound = round + 1;
+
+		int matchNumber = maxNum ?? 0;
+		int expectedMax = matchNumber;
+
+		int? singleMatch = null;
+		if (currentMatches.Count % 3 == 0)
+		{
+			expectedMax = matchNumber + (currentMatches.Count + 1) / 2;
+			singleMatch = expectedMax;
+		}
+		else
+		{
+			expectedMax = matchNumber + currentMatches.Count / 2;
+		}
+
+		int currentChecked = 0;
+		for (matchNumber += 1; matchNumber <= expectedMax; matchNumber++)
+		{
+			var nextMatch = matches.FirstOrDefault(x => x.MatchNumber == matchNumber);
+			if (!nextMatch.IsNotNull())
+			{
+				var num1 = currentMatches.ElementAtOrDefault(currentChecked)?.Id;
+				var num2 = currentMatches.ElementAtOrDefault(currentChecked + 1)?.Id;
+
+				// Set dummy match with TBD value for teams
+				nextMatch ??= new MatchModel(0, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], [num1 ?? null, num2 ?? null], null, null);
+				// Add dummy match (Based on invalid id of 0)
+
+				matches.Add(nextMatch);
+			}
+			currentChecked += 2;
+		}
+
+		matchNumber--;
+
+		CheckNext(matches, nextRound, matchNumber);
+	}
+}

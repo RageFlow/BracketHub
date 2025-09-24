@@ -38,6 +38,7 @@ html, body {
     right: 50%;
     left: 50%;
     bottom: 50%;
+    transform: translateX(-50%);
     width: 8rem;
     height: 3rem;
 }
@@ -61,10 +62,11 @@ html, body {
 .loading-progress-text {
     position: absolute;
     display: block;
-    top: calc(40% - 20px);
+    top: calc(40% - 30px);
     right: 50%;
     left: 50%;
     bottom: 50%;
+    transform: translateX(-50%);
     width: 8rem;
     height: 3rem;
     text-align: center;

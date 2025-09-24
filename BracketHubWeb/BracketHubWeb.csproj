@@ -31,4 +31,8 @@
     <Folder Include="wwwroot\images\Banners\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BracketHubShared\BracketHubShared.csproj" />
+  </ItemGroup>
+
 </Project>

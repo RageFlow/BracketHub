@@ -6,7 +6,7 @@
 
     .game-grid {
         display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1.5rem;
 
         .game-item {
@@ -35,7 +35,40 @@
                 flex-shrink: 0;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                white-space: nowrap;
             }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .page-game-grid {
+        .game-grid {
+            .game-item:nth-last-child(-n+3) {
+                display: none;
+            }
+        }
+
+        &[restricted-size] {
+            .game-grid {
+                .game-item:nth-last-child(-n+3) {
+                    display: flex;
+                }
+            }
+        }
+    }
+}
+@media screen and (min-width: 768px) {
+    .page-game-grid {
+        .game-grid{
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+}
+@media screen and (min-width: 1024px) {
+    .page-game-grid {
+        .game-grid{
+            grid-template-columns: repeat(6, minmax(0, 1fr));
         }
     }
 }

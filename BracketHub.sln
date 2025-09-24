@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11012.119 d18.0
+VisualStudioVersion = 18.0.11012.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BracketHubWeb", "BracketHubWeb\BracketHubWeb.csproj", "{D2674A1E-928A-4C50-B0BF-75A39A5771ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BracketHubAPI", "BracketHubAPI\BracketHubAPI.csproj", "{218F601A-B972-4E70-80B3-F322E04ED72E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BracketHubDatabase", "BracketHubDatabase\BracketHubDatabase.csproj", "{6C5692D9-4892-4AA8-B401-885824BD4BD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BracketHubShared", "BracketHubShared\BracketHubShared.csproj", "{FA501052-1E04-45E8-A000-F0FFF27DAB64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

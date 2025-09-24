@@ -6,6 +6,7 @@
     <main>
 
         <article class="content">
+            <div id="scroll-to-top"></div>
             @Body
         </article>
 
@@ -24,7 +25,24 @@
             GameService.ThrowIfNull();
             GameService.CheckRoute(routedata);
         }
-        
+
         return base.SetParametersAsync(parameters);
+    }
+
+    [Inject]
+    protected IJSRuntime? JS { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += ScrollToTop;
+        base.OnInitialized();
+    }
+
+    private void ScrollToTop(object? sender, LocationChangedEventArgs args)
+    {
+        if (JS.IsNotNull())
+        {
+            JS.InvokeVoidAsync("ScrollToTop");
+        }
     }
 }

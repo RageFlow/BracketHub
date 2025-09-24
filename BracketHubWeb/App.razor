@@ -2,13 +2,14 @@
     <Found Context="routeData">
         <CascadingValue Value="routeData" >
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            @* <FocusOnNavigate RouteData="@routeData" Selector="article" /> *@
         </CascadingValue>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
             <p role="alert">Sorry, there's nothing at this address.</p>
+            <span>@NavigationManager.Uri</span>
         </LayoutView>
     </NotFound>
 </Router>

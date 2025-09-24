@@ -27,6 +27,7 @@ namespace BracketHubWeb.Models
         public static List<GameModel> GameList = new()
         {
             //Testing the desription of this item cuz why not?
+            new GameModel("Other Games","OTHER", ""),
             new GameModel("Counter-Strike 2","CS2", ""),
             new GameModel("Counter-Strike: Source", "CSS", ""),
             new GameModel("Deadlock", "DEADLOCK", ""),
@@ -40,6 +41,18 @@ namespace BracketHubWeb.Models
             new GameModel("Dota 2", "DOTA2", ""),
             new GameModel("Fortnite", "FORTNITE", ""),
             //Repeat
+            new GameModel("Counter-Strike: Source", "CSS", ""),
+            new GameModel("Deadlock", "DEADLOCK", ""),
+            new GameModel("After-H", "AFTERH", ""),
+            new GameModel("Football Manager 2024", "FM24", ""),
+            new GameModel("League of Legends", "LOL", ""),
+            new GameModel("Dota 2", "DOTA2", ""),
+            new GameModel("Counter-Strike 2","CS2", ""),
+            new GameModel("Fortnite", "FORTNITE", ""),
+            new GameModel("Apex Legends", "APEX", ""),
+            new GameModel("Rocket League", "RL", ""),
+            new GameModel("Marvel Rivals", "MRIVALS", ""),
+            new GameModel("Rainbox Six: Siege X", "R6S", ""),
         };
     }
 }

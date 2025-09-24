@@ -1,0 +1,31 @@
+﻿
+
+.status-Open {
+    color: lawngreen;
+    font-weight: bold;
+}
+
+.status-Closed {
+    color: yellow;
+    font-weight: bold;
+}
+
+.status-Running {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-Ended {
+    color: red;
+    font-weight: bold;
+}
+
+
+.status-float[class^="status-"] {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    background: rgba(50,50,50,0.9);
+}

@@ -12,19 +12,19 @@
         </div>
 
         <nav>
-            @if (GameService.Type.IsNotNull())
+            @if (CheckUrl())
             {
                 <div class="nav-item">
-                    <NavLink class="nav-link" href="@Dashboard.NavigateMe(GameService.Type)" title="@GameService.Name">
+                    <NavLink class="nav-link" href="@GameUrl" title="@GameService.Game?.Name">
                         <object data="@GameModelStatics.IconUrl(GameService.Type)" type="image/png">
-                            <img src="/images/icons/default-icon.jpg" alt="">
+                            <img src="images/icons/default-icon.jpg" alt="">
                         </object>
                         @* @GameService.Type *@
                     </NavLink>
                 </div>
             }
             <div class="nav-item">
-                <NavLink class="nav-link" href="/games">
+                <NavLink class="nav-link" href="games">
                     Games
                 </NavLink>
             </div>
@@ -89,7 +89,7 @@
 
         <nav>
             <div class="nav-item" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="/games">
+                <NavLink class="nav-link" href="games">
                     Games
                 </NavLink>
             </div>
@@ -103,20 +103,17 @@
 }
 
 @code {
-    [Inject]
-    protected IJSRuntime? JS { get; set; }
-
     #region
     protected override void OnInitialized()
     {
         GameService.ThrowIfNull();
-        GameService.GameChanged += Checktype;
-        Checktype(this, GameService.Type);
+        GameService.ValuesChanged += Checktypes;
+        Checktypes(this, GameService.Type);
 
         base.OnInitialized();
     }
 
-    private void Checktype(object? sender, string? value)
+    private void Checktypes(object? sender, string? value)
     {
         StateHasChanged();
     }
@@ -153,6 +150,14 @@
         checkTask = null;
     }
 
+    #endregion
+
+    #region GameSpecific
+    private string? GameUrl => GameService.Type.IsNotNull() ? TournamentList.NavigateMe(GameService.Type) : null;
+    private bool CheckUrl()
+    {
+        return GameUrl.IsNotNull() && GameUrl != NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+    }
     #endregion
 
     private void Search(string args)

@@ -1,11 +1,72 @@
 ﻿@inherits TournamentPage
-@page "/games/{Type}/{Id}"
+@page "/games/{Type}/{TournamentId:int}"
 
-<PageTitle>@Type</PageTitle>
+<PageTitle>Tournament - @TournamentId</PageTitle>
 
-<h2>@Type</h2>
-<h2>@Id</h2>
+<div class="page-background" style="@BackgroundUrlStyle"></div>
+
+<div class="page-top-section" page-restrict="true">
+	<div>
+		<h2>@GameService.Tournament?.Name</h2>
+	</div>
+</div>
+
+<div class="tournament-page-content" page-restrict="true">
+
+	<div class="tournament-data">
+
+		<div class="tournament-info tournament-small">
+			<span>Status</span>
+			<span class="tournament-status @("status-" + GameService.Tournament?.Status)">@GameService.Tournament?.Status</span>
+		</div>
+
+		<div class="tournament-info tournament-small">
+			<span>Date</span>
+			<span>@GameService.Tournament?.Date.ToString("MMM dd, yyyy")</span>
+		</div>
+		
+		<div class="tournament-info tournament-signup">
+			<a>Sign up</a>
+		</div>
+
+		<div class="tournament-info tournament-members">
+			<span>Members</span>
+			<span>@GameService.Tournament?.Members?.Count</span>
+		</div>
+
+		<div class="tournament-info tournament-description" style="grid-row: 2; grid-column: 1 / 4;">
+			<p>
+				@GameService.Tournament?.Description
+			</p>
+		</div>
+
+		<div class="tournament-member-list">
+			<div class="tournament-member-list-inner">
+				@if (GameService.Tournament?.Members != null)
+				{
+					for (int i = 1; i <= GameService.Tournament.Members.Count; i++)
+					{
+						<a>
+							<span>
+								<i class="fa-brands fa-uber"></i>
+								@GameService.Tournament.Members[i-1].Nickname
+							</span>
+							<span>@i</span>
+						</a>
+					}
+				}
+			</div>
+		</div>
+
+		<BracketComponent Tournament="GameService.Tournament" />
+	</div>
+</div>
 
 @code {
-	public static string NavigateMe(string type, string? id) => $"/games/{type}/{id ?? "Unknown"}";
+	public static string NavigateMe(string type, int? id) => $"games/{type}/{id?.ToString() ?? "Unknown"}";
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+	}
 }

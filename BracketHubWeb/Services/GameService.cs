@@ -1,6 +1,7 @@
 ﻿using BracketHubWeb.Extensions;
 using BracketHubWeb.Models;
 using BracketHubWeb.Pages.Games;
+using BracketHubWeb.Pages.Games.Tournament;
 using Microsoft.AspNetCore.Components;
 
 namespace BracketHubWeb.Services
@@ -14,39 +15,60 @@ namespace BracketHubWeb.Services
         }
 
         public string? Type { get; private set; }
-        public event EventHandler<string?>? GameChanged;
-        public string? Name => Game?.Name;
-
+        public int? TournamentId { get; private set; }
+        public event EventHandler<string?>? ValuesChanged;
+        
         public GameModel? Game { get; private set; }
+        public static AdvancedTournamentModel? Tournament { get; private set; }
+
         public void CheckRoute(RouteData routedata)
         {
             string? type = null;
-            if (routedata.RouteValues.TryGetValue(nameof(Type), out object? value))
+            if (routedata.RouteValues.TryGetValue(nameof(Type), out object? typeValue))
             {
-                if (value.IsNotNull() && value is string stringvalue)
-                    type = stringvalue;
+                if (typeValue.IsNotNull() && typeValue is string stringTypeValue)
+                    type = stringTypeValue;
                 else
                     type = null;
             }
-
             if (type != Type)
-            {
-                if (GameChanged.IsNotNull())
-                    GameChanged.Invoke(this, type);
-                
+            {                
                 Type = type;
-                Game = type.IsNotNull() ? GameModelStatics.GameList.FirstOrDefault(x => x.Type.ToLower() == type.ToLower()) : null;
+                Game = Type.IsNotNull() ? GameModelStatics.GameList.FirstOrDefault(x => x.Type.Equals(Type, StringComparison.CurrentCultureIgnoreCase)) : null;
             }
+
+            int? tournamentId = null;
+            if (routedata.RouteValues.TryGetValue(nameof(TournamentId), out object? tournamentValue))
+            {
+                if (tournamentValue.IsNotNull() && tournamentValue is int intTournamentValue)
+                    tournamentId = intTournamentValue;
+                else
+                    tournamentId = null;
+            }
+            if (tournamentId != TournamentId)
+            {
+                TournamentId = tournamentId;
+                Tournament = TournamentId.IsNotNull() ? BaseTournamentModelStatics.TournamentList.FirstOrDefault(x => x.Id.IsNotNull() && x.Id == TournamentId)?.Convert() : null;
+                
+                if (Tournament.IsNotNull())
+                {
+                    Tournament.Matches = TestMatchModelStatics.MatchListTest;
+                    Tournament.Members = MemberModelStatics.MemberList.OrderBy(x => x.Nickname).ToList();
+                }
+            }
+
+            if (ValuesChanged.IsNotNull())
+                ValuesChanged.Invoke(this, type);
         }
 
         public void Search(string args)
         {
             if (!string.IsNullOrEmpty(args))
             {
-                var game = GameModelStatics.GameList.FirstOrDefault(x => x.Type.ToLower().Contains(args.ToLower()) || x.Name != null && x.Name.ToLower().Contains(args.ToLower()));
+                var game = GameModelStatics.GameList.FirstOrDefault(x => x.Type.Contains(args, StringComparison.CurrentCultureIgnoreCase) || x.Name != null && x.Name.Contains(args, StringComparison.CurrentCultureIgnoreCase));
                 if (game.IsNotNull())
                 {
-                    NavigationManager.NavigateTo(Dashboard.NavigateMe(game.Type));
+                    NavigationManager.NavigateTo(TournamentList.NavigateMe(game.Type));
                 }
             }
         }

@@ -1,9 +1,7 @@
 ﻿@using BracketHubWeb.Models
 @page "/games"
 
-<div class="page-background" style="@BackgroundUrlStyle">
-	<div></div>
-</div>
+<div class="page-background" style="@BackgroundUrlStyle"></div>
 
 <div class="page-top-section" page-restrict="true">
 	<div>
@@ -11,9 +9,23 @@
 	</div>
 </div>
 
-<GamesGridComponent Title="" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
+<div page-restrict="true">
+	<SearchComponent Placeholder="Search for games" ValueInput="SortItems" />
+</div>
+
+<GamesGridComponent @ref="GamesGridComponentRef" Title="" IsGamePage="true" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
 
 
 @code {
 	protected string BackgroundUrlStyle => $"height: 60vh; opacity: 0.6; background-image: url({GameModelStatics.BannerUrl("Fortnite")}), url(images/CS2-Capture.PNG);";
+
+	private GamesGridComponent? GamesGridComponentRef { get; set; }
+
+	private void SortItems(string value)
+	{
+		if (GamesGridComponentRef.IsNotNull())
+		{
+			GamesGridComponentRef.SearchForValue(value);
+		}
+	}
 }

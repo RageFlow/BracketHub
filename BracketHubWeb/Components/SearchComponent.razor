@@ -3,7 +3,7 @@
     {
         <i class="fa-solid fa-magnifying-glass"></i>
     }
-    <input type="search" placeholder="@Placeholder" @bind="value" @bind:event="oninput" @onkeydown="KeyPress" id="@guid" />
+    <input type="search" placeholder="@Placeholder" value="@Value" @oninput="OnChange" @onkeydown="KeyPress" id="@guid" />
     <div class="input-clear">
         <button @onclick="Clear" @onclick:stopPropagation="true" style="@style"><i class="fa-solid fa-x"></i></button>
     </div>
@@ -33,17 +33,22 @@
     [Parameter]
     public EventCallback<string> ValueEntered { get; set; }
 
+    [Parameter]
+    public EventCallback<string> ValueInput { get; set; }
+
     private Guid guid = Guid.NewGuid();
 
-    private string? value { get; set; }
+    private string? Value { get; set; }
 
     private string? style => isEmpty ? "display:none" : "";
 
-    private bool isEmpty => string.IsNullOrEmpty(value);
+    private bool isEmpty => string.IsNullOrEmpty(Value);
 
     private void Clear()
     {
-        value = string.Empty;
+        Value = string.Empty;
+        if (ValueInput.IsNotNull())
+            ValueInput.InvokeAsync(Value);
         StateHasChanged();
     }
 
@@ -53,6 +58,13 @@
         {
             JS.InvokeVoidAsync("focus", guid);
         }
+    }
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        Value = (string?)e.Value;
+        if (ValueInput.IsNotNull())
+            ValueInput.InvokeAsync(Value);
     }
 
     private void KeyPress(KeyboardEventArgs e)
@@ -68,6 +80,6 @@
 
     private void Search()
     {
-        ValueEntered.InvokeAsync(value);
+        ValueEntered.InvokeAsync(Value);
     }
 }
