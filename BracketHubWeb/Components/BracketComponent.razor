@@ -105,7 +105,7 @@
 		{
 			CheckNext(Matches, 1);
 
-			GroupedMatches = Matches.OrderBy(x => x.MatchNumber).GroupBy(x => x.Round);
+			GroupedMatches = Matches.Where(x => x.Round != null).OrderBy(x => x.MatchNumber).GroupBy(x => x.Round ?? -1);
 		}
 
 		base.OnInitialized();
@@ -146,7 +146,7 @@
 				var num2 = currentMatches.ElementAtOrDefault(currentChecked + 1)?.Id;
 
 				// Set dummy match with TBD value for teams
-				nextMatch ??= new MatchModel(0, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], [num1 ?? null, num2 ?? null], null, null);
+				nextMatch ??= new MatchModel(0, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], [num1 ?? 0, num2 ?? 0], null, null);
 				// Add dummy match (Based on invalid id of 0)
 
 				matches.Add(nextMatch);

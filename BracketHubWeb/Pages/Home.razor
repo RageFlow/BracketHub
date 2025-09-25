@@ -18,8 +18,22 @@
 <TournamentGridComponent Title="Popular Tournaments" Tournaments="BaseTournamentModelStatics.TournamentList.Take(9).ToList()" IsGamePage="false" Style="margin-bottom: 6rem;" />
 
 @code {
+
+    [Inject]
+    protected APIClient APIClient { get; set; } = null!;
+
     private void Search(string args)
     {
         GameService.Search(args);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var ko = await APIClient.GetGames();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

@@ -5,7 +5,7 @@ namespace BracketHubShared.Models
     public class MatchModel
     {
         // Test
-        public MatchModel(int id, Status status, int round, int? matchNumber, int?[]? members, int?[]? parentMatches, int? childMatch, int? winner)
+        public MatchModel(int id, Status status, int round, int? matchNumber, int[]? members, int[]? parentMatches, int? childMatch, int? winner)
         {
             Id = id;
             Status = status;
@@ -19,18 +19,21 @@ namespace BracketHubShared.Models
             ParentMatchess = parentMatches;
             ChildMatch = childMatch;
         }
+        public MatchModel()
+        {
+        }
 
         // Should have something to identify what Parent Round is connected to what Member...
 
         public int Id { get; set; }
         public Status Status { get; set; }
 
-        public int Round { get; set; }
+        public int? Round { get; set; }
         public int? MatchNumber { get; set; }
         public int? Winner { get; set; }
 
-        public int?[]? Members { get; set; }
-        public int?[]? ParentMatchess { get; set; }
+        public int[]? Members { get; set; }
+        public int[]? ParentMatchess { get; set; }
         public int? ChildMatch { get; set; }
     }
 

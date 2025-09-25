@@ -9,7 +9,7 @@ namespace BracketHubShared.Models
         public List<MemberModel>? Members { get; set; }
     }
 
-    // temp
+#if DEBUG
     public static class AdvancedTournamentModelConversion
     {
         public static AdvancedTournamentModel? Convert(this TournamentModel? model)
@@ -31,4 +31,5 @@ namespace BracketHubShared.Models
             };
         }
     }
+#endif
 }

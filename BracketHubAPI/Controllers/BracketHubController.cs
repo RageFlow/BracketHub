@@ -25,7 +25,7 @@ namespace BracketHubAPI.Controllers
         }
 
         [HttpGet(nameof(GetGame))]
-        public GameModel? GetGame(string type)
+        public GameModel? GetGame([FromQuery] string type)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -45,8 +45,38 @@ namespace BracketHubAPI.Controllers
         }
         
         
+        [HttpGet(nameof(GetTournament))]
+        public AdvancedTournamentModel? GetTournament([FromQuery] int id)
+        {
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                return context.Tournaments.Where(x => x.Id == id).Select(x => new AdvancedTournamentModel()
+                {
+                    Id = x.Id,
+                    GameType = x.Type,
+                    Status = x.Status,
+                    Name = x.Name,
+                    Banner = x.Banner,
+                    Date = x.Date,
+                    IsPublic = x.IsPublic,
+                    Description = x.Description,
+                    Matches = x.Matches != null ? x.Matches.Select(m => new MatchModel()
+                    {
+                        Id = m.Id,
+                        Status = m.Status,
+                        Round = m.Round,
+                        MatchNumber = m.MatchNumber,
+                        Winner = m.Winner,
+                        Members = m.Members != null ? m.Members.Select(mem => mem.Id).ToArray() : null,
+                        ParentMatchess = m.ParentMatches != null ? m.ParentMatches.Select(pm => pm.Id).ToArray() : null,
+                        ChildMatch = m.ChildMatch != null ? m.ChildMatch.Id : null
+                    }).ToList() : null
+                }).FirstOrDefault();
+            }
+        }
+        
         [HttpGet(nameof(GetTournaments))]
-        public IEnumerable<TournamentModel> GetTournaments(string? type = null)
+        public IEnumerable<TournamentModel> GetTournaments([FromQuery] string? type = null)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -78,22 +108,32 @@ namespace BracketHubAPI.Controllers
                 }
             }
         }
-        
-        [HttpGet(nameof(GetTournament))]
-        public TournamentModel? GetTournament(int id)
+
+        [HttpPost(nameof(PutTournament))]
+        public async Task<TournamentModel?> PutTournament(AdvancedTournamentModel model)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return context.Tournaments.Where(x => x.Id == id).Select(x => new TournamentModel()
+                var tournament = context.Tournaments.FirstOrDefault(x => x.Id == model.Id);
+
+                tournament ??= context.Tournaments.Add(new Tournament()
                 {
-                    Id = x.Id,
-                    GameType = x.Type,
-                    Status = x.Status,
-                    Name = x.Name,
-                    Banner = x.Banner,
-                    Date = x.Date,
-                    IsPublic = x.IsPublic,
-                }).FirstOrDefault();
+                    Type = model.GameType,
+                    Name = model.Name,
+                }).Entity;
+
+                tournament.Type = model.GameType;
+                tournament.Status = model.Status;
+                tournament.Name = model.Name;
+                tournament.Banner = model.Banner;
+                tournament.Date = model.Date;
+                tournament.IsPublic = model.IsPublic;
+                tournament.Description = model.Description;
+
+                await context.SaveChangesAsync();
+
+                return tournament.Convert();
+
             }
         }
 
@@ -130,33 +170,5 @@ namespace BracketHubAPI.Controllers
             }
         }
         #endregion
-
-        [HttpPost(nameof(PutTournament))]
-        public async Task<TournamentModel?> PutTournament(AdvancedTournamentModel model)
-        {
-            using (var context = _contextFactory.CreateDbContext())
-            {
-                var tournament = context.Tournaments.FirstOrDefault(x => x.Id == model.Id);
-
-                tournament ??= context.Tournaments.Add(new Tournament()
-                {
-                    Type = model.GameType,
-                    Name = model.Name,
-                }).Entity;
-
-                tournament.Type = model.GameType;
-                tournament.Status = model.Status;
-                tournament.Name = model.Name;
-                tournament.Banner = model.Banner;
-                tournament.Date = model.Date;
-                tournament.IsPublic = model.IsPublic;
-                tournament.Description = model.Description;
-
-                await context.SaveChangesAsync();
-
-                return tournament.Convert();
-
-            }
-        }
     }
 }

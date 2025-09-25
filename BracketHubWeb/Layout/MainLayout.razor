@@ -16,17 +16,28 @@
 @code{
     [CascadingParameter]
     public RouteData? RouteData { get; set; }
+    private bool RouteDataChanged = false;
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
         if (parameters.TryGetValue(nameof(RouteData), out RouteData? routedata))
         {
-            routedata.ThrowIfNull();
-            GameService.ThrowIfNull();
-            GameService.CheckRoute(routedata);
+            RouteDataChanged = true;
         }
 
         return base.SetParametersAsync(parameters);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (RouteDataChanged)
+        {
+            RouteDataChanged = false;
+            RouteData.ThrowIfNull();
+            GameService.ThrowIfNull();
+            await GameService.CheckRoute(RouteData);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     [Inject]
