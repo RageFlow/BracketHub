@@ -7,7 +7,7 @@ namespace BracketHubDatabase.Entities
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public string? Nickname { get; set; }
+        public required string Nickname { get; set; }
 
         // Link/Refs
         public List<Match>? Matches { get; set; }

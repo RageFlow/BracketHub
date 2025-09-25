@@ -7,12 +7,12 @@ namespace BracketHubShared.Models
         public int? Id { get; set; }
         public string GameType { get; set; } = string.Empty;
         public Status Status { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = $"New Tournament"; // Placeholder
         public string? Banner { get; set; }
         public DateTime? Date { get; set; } = DateTime.Today;
         public bool IsPublic { get; set; }
 
-        public TournamentModel(int id, string? name, bool isPublic, string gameType, Status status = Status.Open, DateTime? date = null)
+        public TournamentModel(int id, string name, bool isPublic, string gameType, Status status = Status.Open, DateTime? date = null)
         {
             Id = id;
             Name = name;

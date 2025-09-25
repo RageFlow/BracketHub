@@ -4,16 +4,15 @@ namespace BracketHubShared.Models
 {
     public class MemberModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string Name {  get; set; }
         public string Nickname { get; set; }
-        public string NameOrNickname => Name.Equals(Nickname, StringComparison.CurrentCultureIgnoreCase) ? Name : $"{Nickname} ({Name})";
-
-        public MemberModel(int id, string? name = null, string? nickname = null)
+        
+        public MemberModel(int id, string name, string nickname)
         {
             Id = id;
-            Name = name ?? $"Member-{id}";
-            Nickname = nickname ?? Name;
+            Name = name;
+            Nickname = nickname;
         }
     }
 
