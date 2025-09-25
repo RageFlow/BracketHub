@@ -27,6 +27,9 @@ namespace BracketHubDatabase.Entities
         {
             builder.HasKey(e => e.Id);
 
+            builder.Property(e => e.Type)
+                .HasMaxLength(10);
+
             builder.Property(e => e.Status)
                 .HasConversion(e => e.ToString(), e => Enum.Parse<Status>(e));
 

@@ -15,7 +15,7 @@ namespace BracketHubDatabase
         {
         }
 
-        protected BrackethubContext(DbContextOptions<BrackethubContext> options) : base(options)
+        public BrackethubContext(DbContextOptions options) : base(options)
         {
         }
 
