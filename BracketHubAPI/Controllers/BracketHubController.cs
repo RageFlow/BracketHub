@@ -3,6 +3,7 @@ using BracketHubDatabase.Entities;
 using BracketHubDatabase.Extensions;
 using BracketHubShared.CRUD;
 using BracketHubShared.Models;
+using BracketHubShared.Statics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,7 +53,7 @@ namespace BracketHubAPI.Controllers
                     GameType = x.Type,
                     Status = x.Status,
                     Name = x.Name,
-                    Banner = x.Banner,
+                    Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                     Date = x.Date,
                     IsPublic = x.IsPublic,
                     Description = x.Description,
@@ -84,7 +85,7 @@ namespace BracketHubAPI.Controllers
                         GameType = x.Type,
                         Status = x.Status,
                         Name = x.Name,
-                        Banner = x.Banner,
+                        Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
                     }).ToList();
@@ -97,7 +98,7 @@ namespace BracketHubAPI.Controllers
                         GameType = x.Type,
                         Status = x.Status,
                         Name = x.Name,
-                        Banner = x.Banner,
+                        Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
                     }).Take(10).ToList();

@@ -9,14 +9,14 @@
                 <a href="@Tournament.NavigateMe(item.GameType, item.Id)" class="tournament-item" type="2">
 
                     <div class="tournament-item-top">
-                        <object class="tournament-item-banner" data="@(item.Banner ?? GameModelStatics.BannerUrl(item.GameType))" type="image/png">
+                        <object class="tournament-item-banner" data="@(item.Banner ?? ImageStatics.BannerUrl(item.GameType))" type="image/png">
                             <img src="images/banners/fortnite-banner.jpg" alt="">
                         </object>
                     </div>
 
                     @if (!IsGamePage)
                     {
-                        <object class="tournament-item-icon" data="@GameModelStatics.IconUrl(item.GameType)" type="image/png">
+                        <object class="tournament-item-icon" data="@ImageStatics.IconUrl(item.GameType)" type="image/png">
                             <img src="images/icons/default-icon.jpg" alt="">
                         </object>
                     }

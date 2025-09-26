@@ -7,7 +7,7 @@
             foreach (var item in SortedGames)
             {
                 <a href="@TournamentList.NavigateMe(item.Type)" class="game-item">
-                    <img src="@GameModelStatics.CoverUrl(item.Type)" />
+                    <img src="@ImageStatics.CoverUrl(item.Type)" />
                     <span>@item.Name</span>
                 </a>
             }

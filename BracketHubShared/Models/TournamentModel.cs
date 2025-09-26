@@ -1,4 +1,5 @@
 ﻿using BracketHubShared.Enums;
+using BracketHubShared.Statics;
 
 namespace BracketHubShared.Models
 {
@@ -32,7 +33,7 @@ namespace BracketHubShared.Models
         {
             new TournamentModel(3423, "Test tournament", true, "CS2")
             {
-                Banner = GameModelStatics.BannerUrl("CSS")
+                Banner = ImageStatics.BannerUrl("CSS")
             },
             new TournamentModel(1231, "Rivals go go", true, "CSS"),
             new TournamentModel(9863, "Rivals go go", true, "DEADLOCK"),

@@ -1,6 +1,7 @@
 ﻿
 using BracketHubShared.Extensions;
 using BracketHubShared.Models;
+using BracketHubShared.Statics;
 using Microsoft.AspNetCore.Components;
 
 namespace BracketHubWeb.Pages.Games
@@ -14,7 +15,7 @@ namespace BracketHubWeb.Pages.Games
         // @page "/game/{Type:string}
                 
         protected virtual string? BackgroundUrlOverride { get; set; }
-        protected string BackgroundUrl => BackgroundUrlOverride.IsNotNull() ? BackgroundUrlOverride : GameModelStatics.BackgroundUrl(Type);
+        protected string BackgroundUrl => BackgroundUrlOverride.IsNotNull() ? BackgroundUrlOverride : ImageStatics.BackgroundUrl(Type);
         protected string BackgroundUrlStyle => $"height: 60vh; opacity: 0.4; background-image: url({BackgroundUrl}), url(images/CS2-Capture.PNG);";
     }
 }
