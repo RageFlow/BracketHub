@@ -25,7 +25,7 @@ namespace BracketHubAPI.Controllers
 
 #region Game
         [HttpGet(nameof(GetGame))]
-        public async Task<GameModel?> GetGame([FromQuery] string type, CancellationToken cancellationToken)
+        public async Task<GameModel?> GetGame([FromQuery] string type, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -36,7 +36,7 @@ namespace BracketHubAPI.Controllers
         }
         
         [HttpGet(nameof(GetGames))]
-        public async Task<IEnumerable<GameModel>> GetGames(CancellationToken cancellationToken)
+        public async Task<IEnumerable<GameModel>> GetGames(CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -47,7 +47,7 @@ namespace BracketHubAPI.Controllers
 
 #region Tournament
         [HttpGet(nameof(GetTournament))]
-        public async Task<AdvancedTournamentModel?> GetTournament([FromQuery] int id, CancellationToken cancellationToken)
+        public async Task<AdvancedTournamentModel?> GetTournament([FromQuery] int id, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -77,7 +77,7 @@ namespace BracketHubAPI.Controllers
         }
         
         [HttpGet(nameof(GetTournaments))]
-        public async Task<IEnumerable<TournamentModel>> GetTournaments([FromQuery] string? type = null, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TournamentModel>> GetTournaments([FromQuery] string? type = null, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -111,7 +111,7 @@ namespace BracketHubAPI.Controllers
         }
 
         [HttpPut(nameof(PutTournament))]
-        public async Task<ActionResult<TournamentModel?>> PutTournament([FromBody] AdvancedTournamentModel model, CancellationToken cancellationToken)
+        public async Task<ActionResult<TournamentModel?>> PutTournament([FromBody] AdvancedTournamentModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -139,7 +139,7 @@ namespace BracketHubAPI.Controllers
         }
 
         [HttpPut(nameof(AddTournamentMember))]
-        public async Task<ActionResult<AdvancedTournamentModel?>> AddTournamentMember([FromBody] TournamentMemberLink model, CancellationToken cancellationToken)
+        public async Task<ActionResult<AdvancedTournamentModel?>> AddTournamentMember([FromBody] TournamentMemberLink model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -165,7 +165,7 @@ namespace BracketHubAPI.Controllers
 
 
         [HttpPut(nameof(PutMatch))]
-        public async Task<ActionResult> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken)
+        public async Task<ActionResult> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -217,7 +217,7 @@ namespace BracketHubAPI.Controllers
 
         #region Member (Signup & Signin)
         [HttpPut(nameof(MemberSignup))]
-        public async Task<MemberModel> MemberSignup([FromBody] MemberCRUDModel model, CancellationToken cancellationToken)
+        public async Task<MemberModel> MemberSignup([FromBody] MemberCRUDModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -238,7 +238,7 @@ namespace BracketHubAPI.Controllers
             }
         }
         [HttpPost(nameof(MemberSignin))]
-        public async Task<MemberModel?> MemberSignin([FromBody] MemberCRUDModel model, CancellationToken cancellationToken)
+        public async Task<MemberModel?> MemberSignin([FromBody] MemberCRUDModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
