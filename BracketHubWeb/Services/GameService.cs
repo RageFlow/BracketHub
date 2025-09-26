@@ -22,6 +22,7 @@ namespace BracketHubWeb.Services
         public static GameModel? Game { get; private set; }
         public static List<GameModel>? Games { get; private set; }
         public static AdvancedTournamentModel? Tournament { get; private set; }
+        public static List<TournamentModel>? Tournaments { get; private set; }
 
         public async Task CheckRoute(RouteData routedata)
         {
@@ -36,11 +37,7 @@ namespace BracketHubWeb.Services
             if (type != Type)
             {                
                 Type = type;
-#if DEBUG
-                Game = Type.IsNotNull() ? GameModelStatics.GameList.FirstOrDefault(x => x.Type.Equals(Type, StringComparison.CurrentCultureIgnoreCase)) : null;
-#else
-                Game = Type.IsNotNull() ? await APIClient.GetGame(Type) : null;
-#endif
+                await GetGame();
             }
 
             int? tournamentId = null;
@@ -54,19 +51,7 @@ namespace BracketHubWeb.Services
             if (tournamentId != TournamentId)
             {
                 TournamentId = tournamentId;
-#if DEBUG
-                Tournament = TournamentId.IsNotNull() ? BaseTournamentModelStatics.TournamentList.FirstOrDefault(x => x.Id.IsNotNull() && x.Id == TournamentId)?.Convert() : null;
-#else
-                Tournament = TournamentId.IsNotNull() ? await APIClient.GetTournament(TournamentId.Value) : null;
-#endif
-
-#if DEBUG
-                if (Tournament.IsNotNull())
-                {
-                    Tournament.Matches = TestMatchModelStatics.MatchListTest;
-                    Tournament.Members = MemberModelStatics.MemberList.OrderBy(x => x.Nickname).ToList();
-                }
-#endif
+                await GetTournament();
             }
 
             if (ValuesChanged.IsNotNull())
@@ -75,15 +60,38 @@ namespace BracketHubWeb.Services
             await Task.CompletedTask;
         }
 
+        public async Task GetGame()
+        {
+            Game = Type.IsNotNull() ? await APIClient.GetGame(Type) : null;
+        }
+
+        public async Task GetGames()
+        {
+            if (!Games.IsNotNull() || Games.Count <= 0)
+            {
+                Games = await APIClient.GetGames();
+            }
+        }
+
+        public async Task GetTournament()
+        {
+            Tournament = TournamentId.IsNotNull() ? await APIClient.GetTournament(TournamentId.Value) : null;
+        }
+
+        public async Task GetTournaments()
+        {
+            if (!Tournaments.IsNotNull() || Tournaments.Count <= 0)
+            {
+                Tournaments = await APIClient.GetTournaments();
+            }
+        }
+
         public void Search(string args)
         {
             if (!string.IsNullOrEmpty(args))
             {
-#if DEBUG
-                var game = GameModelStatics.GameList.FirstOrDefault(x => x.Type.Contains(args, StringComparison.CurrentCultureIgnoreCase) || x.Name != null && x.Name.Contains(args, StringComparison.CurrentCultureIgnoreCase));
-#else
                 var game = Games.IsNotNull() ? Games.FirstOrDefault(x => x.Type.Contains(args, StringComparison.CurrentCultureIgnoreCase) || x.Name != null && x.Name.Contains(args, StringComparison.CurrentCultureIgnoreCase)) : null;
-#endif
+
                 if (game.IsNotNull())
                 {
                     NavigationManager.NavigateTo(TournamentList.NavigateMe(game.Type));

@@ -25,7 +25,8 @@ namespace BracketHubShared.Models
         public TournamentModel() { }
     }
 
-    public static class BaseTournamentModelStatics
+#if DEBUG
+    public static class TournamentModelConversion
     {
         public static List<TournamentModel> TournamentList = new()
         {
@@ -50,4 +51,5 @@ namespace BracketHubShared.Models
             new TournamentModel(1543, "Local testing", false, "CS2", Status.Ended),
         };
     }
+#endif
 }

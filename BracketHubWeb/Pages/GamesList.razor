@@ -12,13 +12,23 @@
 	<SearchComponent Placeholder="Search for games" ValueInput="SortItems" />
 </div>
 
-<GamesGridComponent @ref="GamesGridComponentRef" Title="" IsGamePage="true" Games="@GameModelStatics.GameList" Style="margin-bottom: 6rem;" />
+<GamesGridComponent @ref="GamesGridComponentRef" Title="" IsGamePage="true" Games="@GameService.Games" Style="margin-bottom: 6rem;" />
 
 
 @code {
 	protected string BackgroundUrlStyle => $"height: 60vh; opacity: 0.6; background-image: url({GameModelStatics.BannerUrl("Fortnite")}), url(images/CS2-Capture.PNG);";
 
 	private GamesGridComponent? GamesGridComponentRef { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await GameService.GetGames();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
+	}
 
 	private void SortItems(string value)
 	{

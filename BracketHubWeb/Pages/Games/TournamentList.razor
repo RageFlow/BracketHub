@@ -14,8 +14,18 @@
 	</div>
 </div>
 
-<TournamentGridComponent Title="Tournaments" IsGamePage="true" Tournaments="BaseTournamentModelStatics.TournamentList.Where(x => x.GameType == Type).ToList()" />
+<TournamentGridComponent Title="Tournaments" IsGamePage="true" Tournaments="GameService.Tournaments?.Where(x => x.GameType == Type).ToList()" />
 
 @code {
 	public static string NavigateMe(string type) => $"games/{type}";
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await GameService.GetTournaments();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
+	}
 }

@@ -2,13 +2,9 @@
 using BracketHubDatabase.Entities;
 using BracketHubDatabase.Extensions;
 using BracketHubShared.CRUD;
-using BracketHubShared.Enums;
 using BracketHubShared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BracketHubAPI.Controllers
 {

@@ -1,4 +1,5 @@
-﻿using BracketHubShared.Extensions;
+﻿using BracketHubShared.Enums;
+using BracketHubShared.Extensions;
 
 namespace BracketHubShared.Models
 {
