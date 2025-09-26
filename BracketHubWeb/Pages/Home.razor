@@ -2,7 +2,6 @@
 
 <PageTitle>Home</PageTitle>
 
-
 <div class="page-background"></div>
 
 <div class="page-home-top-section" page-restrict="true">
@@ -30,6 +29,7 @@
         {
             await GameService.GetGames();
             await GameService.GetTournaments();
+            StateHasChanged();
         }
 
         await base.OnAfterRenderAsync(firstRender);

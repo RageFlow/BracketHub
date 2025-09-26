@@ -65,8 +65,14 @@
 @code {
 	public static string NavigateMe(string type, int? id) => $"games/{type}/{id?.ToString() ?? "Unknown"}";
 
-	protected override void OnInitialized()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		base.OnInitialized();
+		if (firstRender && GameService?.TournamentTask != null)
+		{
+			await GameService.TournamentTask;
+			StateHasChanged();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
 	}
 }

@@ -2,36 +2,46 @@
 <div class="page-tournament-grid" page-restrict="true" style="@Style" restricted-size="@IsGamePage">
     <h3>@Title</h3>
     <div class="tournament-grid">
-        @foreach (var item in Tournaments)
+        @if (Tournaments != null)
         {
-            <a href="@Tournament.NavigateMe(item.GameType, item.Id)" class="tournament-item" type="2">
+            foreach (var item in Tournaments)
+            {
+                <a href="@Tournament.NavigateMe(item.GameType, item.Id)" class="tournament-item" type="2">
 
-                <div class="tournament-item-top">
-                    <object class="tournament-item-banner" data="@(item.Banner ?? GameModelStatics.BannerUrl(item.GameType))" type="image/png">
-                        <img src="images/banners/fortnite-banner.jpg" alt="">
-                    </object>
-                </div>
-
-                @if (!IsGamePage)
-                {
-                    <object class="tournament-item-icon" data="@GameModelStatics.IconUrl(item.GameType)" type="image/png">
-                        <img src="images/icons/default-icon.jpg" alt="">
-                    </object>
-                }
-
-                <div class="tournament-item-inner">
-                    <div class="tournament-item-inner-image">
-                        <i class="fa-solid fa-trophy"></i>
+                    <div class="tournament-item-top">
+                        <object class="tournament-item-banner" data="@(item.Banner ?? GameModelStatics.BannerUrl(item.GameType))" type="image/png">
+                            <img src="images/banners/fortnite-banner.jpg" alt="">
+                        </object>
                     </div>
-                    <span class="status-float @("status-" + item.Status)">@item.Status</span>
-                    <div class="tournament-item-inner-data">
-                        <span>@item.Name</span>
-                        <div>
-                            <span>@item.Date?.ToString("MMM dd, yyyy")</span>
+
+                    @if (!IsGamePage)
+                    {
+                        <object class="tournament-item-icon" data="@GameModelStatics.IconUrl(item.GameType)" type="image/png">
+                            <img src="images/icons/default-icon.jpg" alt="">
+                        </object>
+                    }
+
+                    <div class="tournament-item-inner">
+                        <div class="tournament-item-inner-image">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <span class="status-float @("status-" + item.Status)">@item.Status</span>
+                        <div class="tournament-item-inner-data">
+                            <span>@item.Name</span>
+                            <div>
+                                <span>@item.Date?.ToString("MMM dd, yyyy")</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                <div class="game-item loading-object"></div>
+            }
         }
     </div>
 </div>
@@ -41,7 +51,7 @@
     public string? Title { get; set; } = "Tournaments";
 
     [Parameter]
-    public List<TournamentModel> Tournaments { get; set; } = new();
+    public List<TournamentModel>? Tournaments { get; set; }
 
     [Parameter]
     public bool IsGamePage { get; set; }

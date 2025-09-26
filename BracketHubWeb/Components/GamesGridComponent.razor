@@ -2,12 +2,22 @@
 <div class="page-game-grid" page-restrict="true" style="@Style" restricted-size="@IsGamePage">
     <h3>@Title</h3>
     <div class="game-grid">
-        @foreach (var item in SortedGames)
+        @if (SortedGames != null)
         {
-            <a href="@TournamentList.NavigateMe(item.Type)" class="game-item">
-                <img src="@GameModelStatics.CoverUrl(item.Type)" />
-                <span>@item.Name</span>
-            </a>
+            foreach (var item in SortedGames)
+            {
+                <a href="@TournamentList.NavigateMe(item.Type)" class="game-item">
+                    <img src="@GameModelStatics.CoverUrl(item.Type)" />
+                    <span>@item.Name</span>
+                </a>
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                <div class="game-item loading-object"></div>
+            }
         }
     </div>
 </div>
@@ -17,7 +27,7 @@
     public string? Title { get; set; } = "Games";
 
     [Parameter]
-    public List<GameModel> Games { get; set; } = new();
+    public List<GameModel>? Games { get; set; }
 
     [Parameter]
     public bool IsGamePage { get; set; }
@@ -25,12 +35,22 @@
     [Parameter]
     public string? Style { get; set; }
 
-    private List<GameModel> SortedGames { get; set; } = new();
+    private List<GameModel>? SortedGames { get; set; }
 
     protected override void OnInitialized()
     {
         SortedGames = Games;
         base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (SortedGames == null && Games != null)
+        {
+            SortedGames = Games;
+            StateHasChanged();
+        }
+        base.OnAfterRender(firstRender);
     }
 
     public void SearchForValue(string? value)
@@ -41,7 +61,7 @@
         }
         else
         {
-            SortedGames = Games.Where(x => x.Name.IsNotNull() && x.Name.Contains(value, StringComparison.CurrentCultureIgnoreCase) ||
+            SortedGames = Games?.Where(x => x.Name.IsNotNull() && x.Name.Contains(value, StringComparison.CurrentCultureIgnoreCase) ||
                 x.Type.IsNotNull() && x.Type.Contains(value, StringComparison.CurrentCultureIgnoreCase) ||
                 x.Description.IsNotNull() && x.Description.Contains(value, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
