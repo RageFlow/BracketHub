@@ -146,10 +146,6 @@
         grid-template-rows: 1fr 1fr 1fr auto; // Default
         gap: 1rem;
 
-        .validation-errors {
-            grid-column: span 2;
-        }
-
         .tournament-value {
             padding: 1rem;
             border-radius: var(--border-radius);

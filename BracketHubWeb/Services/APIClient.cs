@@ -102,14 +102,14 @@ namespace BracketHubWeb.Services
         }
 
 
-        public async Task<MemberModel?> MemberSignup(MemberCreateModel member, CancellationToken cancellationToken = default)
+        public async Task<MemberModel?> MemberSignup(MemberCreateUpdateModel member, CancellationToken cancellationToken = default)
         {
             string url = GetUrlWithQuery(nameof(MemberSignup));
             using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(member), cancellationToken);
 
             return await CheckAndConvertResult<MemberModel?>(response);
         }
-        public async Task<MemberModel?> MemberSignin(MemberCreateModel member, CancellationToken cancellationToken = default)
+        public async Task<MemberModel?> MemberSignin(MemberCreateUpdateModel member, CancellationToken cancellationToken = default)
         {
             string url = GetUrlWithQuery(nameof(MemberSignin));
             using HttpResponseMessage response = await httpClient.PostAsync(url, SerializeModel(member), cancellationToken);

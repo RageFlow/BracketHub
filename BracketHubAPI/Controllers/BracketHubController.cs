@@ -217,11 +217,15 @@ namespace BracketHubAPI.Controllers
 
         #region Member (Signup & Signin)
         [HttpPut(nameof(MemberSignup))]
-        public async Task<MemberModel> MemberSignup([FromBody] MemberCreateModel model, CancellationToken cancellationToken = default)
+        public async Task<MemberModel> MemberSignup([FromBody] MemberCreateUpdateModel model, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrEmpty(model.Name) || string.IsNullOrEmpty(model.Nickname))
+                throw new FormatException("Incorrect model data");
+
             using (var context = _contextFactory.CreateDbContext())
             {
-                var member = await context.Members.FirstOrDefaultAsync(x => x.Name == model.Name, cancellationToken);
+                // To check if exists.
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
 
                 member ??= context.Members.Add(new Member()
                 {
@@ -229,7 +233,7 @@ namespace BracketHubAPI.Controllers
                     Nickname = model.Nickname,
                 }).Entity;
 
-                member.Name = model.Nickname;
+                member.Name = model.Name;
                 member.Nickname = model.Nickname;
 
                 await context.SaveChangesAsync(cancellationToken);

@@ -20,9 +20,36 @@
 			@if (UserService.CurrentMember != null)
 			{
 				<div class="user-functions">
-					<span>@UserService.CurrentMember.Id</span>
-					<span>@UserService.CurrentMember.Name</span>
-					<span>@UserService.CurrentMember.Nickname</span>
+					<h4>User</h4>
+					<EditForm Model="CreateModel" OnValidSubmit="Signup" FormName="Update">
+						<DataAnnotationsValidator />
+						<div class="user-value">
+							<label>
+								User Id
+							</label>
+							<InputNumber @bind-Value="CreateModel.Id" disabled="true" />
+						</div>
+						
+						<div class="user-value">
+							<label>
+								Name
+							</label>
+							<InputText @bind-Value="CreateModel.Name" />
+						</div>
+
+						<div class="user-value">
+							<label>
+								Nickname
+							</label>
+							<InputText @bind-Value="CreateModel.Nickname" />
+						</div>
+
+						<div></div>
+
+						<button type="submit">
+							Update Info
+						</button>
+					</EditForm>
 
 					<button @onclick="SignOut">
 						Sign out
@@ -45,10 +72,13 @@
 								<InputNumber @bind-Value="ReadModel.Id" />
 							</div>
 
+							<div></div>
+
 							<button type="submit">
 								Login
 							</button>
 						</EditForm>
+
 						<button type="button" @onclick="ChangeType">
 							Change to Signup
 						</button>
@@ -72,10 +102,13 @@
 								<InputText @bind-Value="CreateModel.Nickname" />
 							</div>
 
+							<div></div>
+
 							<button type="submit">
 								Sign up
 							</button>
 						</EditForm>
+
 						<button type="button" @onclick="ChangeType">
 							Change to Login
 						</button>
@@ -92,11 +125,7 @@
 @code {
 	private bool Visible { get; set; }
 
-	private MemberCreateModel CreateModel { get; set; } = new()
-	{
-		Name = string.Empty,
-		Nickname = string.Empty
-	};
+	private MemberCreateUpdateModel CreateModel { get; set; } = new();
 
 	private MemberReadModel ReadModel { get; set; } = new();
 
@@ -106,6 +135,13 @@
 
 	public void ShowMenu()
 	{
+		ReadModel = new();
+		if (UserService.CurrentMember != null)
+		{
+			CreateModel.Id = UserService.CurrentMember.Id;
+			CreateModel.Name = UserService.CurrentMember.Name;
+			CreateModel.Nickname = UserService.CurrentMember.Nickname;
+		}
 		Visible = true;
 		StateHasChanged();
 	}
@@ -125,6 +161,7 @@
 	private void SignOut()
 	{
 		UserService.SignOut();
+		CreateModel = new();
 		StateHasChanged();
 	}
 
@@ -134,7 +171,7 @@
 		await UserService.Signin(ReadModel);
 
 		if (UserService.CurrentMember.IsNotNull() && UserService.CurrentMember.Id == ReadModel.Id)
-			StateHasChanged();
+			ShowMenu();
 		else
 			ErrorMessage = "Something went wrong!";
 	}
@@ -145,7 +182,7 @@
 		await UserService.Signup(CreateModel);
 
 		if (UserService.CurrentMember.IsNotNull() && UserService.CurrentMember.Name == CreateModel.Name)
-			StateHasChanged();
+			ShowMenu();
 		else
 			ErrorMessage = "Something went wrong!";
 	}

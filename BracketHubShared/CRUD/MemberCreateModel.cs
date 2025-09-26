@@ -2,14 +2,16 @@
 
 namespace BracketHubShared.CRUD
 {
-    public class MemberCreateModel
+    public class MemberCreateUpdateModel
     {
-        [Required(AllowEmptyStrings = false)]
-        [MinLength(2)]
-        public required string Name { get; set; }
+        public int? Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [MinLength(2)]
-        public required string Nickname { get; set; }
+        public string? Name { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MinLength(2)]
+        public string? Nickname { get; set; }
     }
 }

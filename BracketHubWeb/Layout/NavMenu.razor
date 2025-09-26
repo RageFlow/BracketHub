@@ -37,7 +37,9 @@
         <div class="nav-functions">
             <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="Search" />
 
-            <button @onclick="ToggleLogin">Login</button>
+            <button @onclick="ToggleLogin">
+                <i class="fa-solid fa-user"></i>
+            </button>
         </div>
     </div>
 
@@ -95,6 +97,11 @@
             <div class="nav-item" @onclick="ToggleNavMenu">
                 <NavLink class="nav-link" href="">
                     Popular
+                </NavLink>
+            </div>
+            <div class="nav-item" @onclick="ToggleNavMenu">
+                <NavLink class="nav-link" @onclick="ToggleLogin">
+                    User
                 </NavLink>
             </div>
         </nav>

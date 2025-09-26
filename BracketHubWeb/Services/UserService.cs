@@ -18,11 +18,12 @@ namespace BracketHubWeb.Services
             //CurrentMember = await APIClient.MemberSignin(model);
             //if (CurrentMember.IsNotNull() && CurrentMember.Id != model.Id)
             //    CurrentMember = null;
-            CurrentMember = new(2, "Yaaaa Nooo", "YaNo");
+            CurrentMember = new(model.Id ?? 1, "Yaaaa Nooo", "YaNo");
         }
-        public async Task Signup(MemberCreateModel model)
+        public async Task Signup(MemberCreateUpdateModel model)
         {
-            CurrentMember = await APIClient.MemberSignup(model);
+            //CurrentMember = await APIClient.MemberSignup(model);
+            CurrentMember = new(model.Id ?? 1, model.Name ?? "TEST", model.Nickname ?? "TEST");
         }
         public void SignOut()
         {
