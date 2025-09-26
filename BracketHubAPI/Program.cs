@@ -12,10 +12,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-#if Release
-            policy.WithOrigins("https://gregerdesign.dk");
-#else
+#if DEBUG
             policy.WithOrigins("https://localhost:7140");
+#else
+            policy.WithOrigins("https://gregerdesign.dk");
 #endif
         });
 });
@@ -25,8 +25,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Factory instead og normal Context
-builder.Services.AddDbContextFactory<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
-//builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContextFactory<BrackethubContext>(option => option.UseSqlServer(connectionString));
+//builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=SERVER2000;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
 
 var app = builder.Build();
 

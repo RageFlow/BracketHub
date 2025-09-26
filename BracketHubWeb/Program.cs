@@ -13,11 +13,11 @@ builder.Services.AddSingleton<GameService>();
 builder.Services.AddHttpClient<APIClient>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(5);
-#if Release
+#if DEBUG
+    client.BaseAddress = new Uri("http://localhost:5017");
+#else
     //client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
     client.BaseAddress = new Uri("https://gregerdesign.dk");
-#else
-    client.BaseAddress = new Uri("http://localhost:5017");
 #endif
 });
 
