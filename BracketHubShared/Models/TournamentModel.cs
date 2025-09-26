@@ -1,13 +1,18 @@
 ﻿using BracketHubShared.Enums;
 using BracketHubShared.Statics;
+using System.ComponentModel.DataAnnotations;
 
 namespace BracketHubShared.Models
 {
     public class TournamentModel
     {
         public int? Id { get; set; }
+
+        [Required(AllowEmptyStrings=false)]
         public string GameType { get; set; } = string.Empty;
         public Status Status { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
         public string Name { get; set; } = $"New Tournament"; // Placeholder
         public string? Banner { get; set; }
         public DateTime? Date { get; set; } = DateTime.Today;

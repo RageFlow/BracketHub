@@ -1,7 +1,11 @@
 ﻿@inherits LayoutComponentBase
 <div class="page">
 
-    <NavMenu />
+    <CascadingValue Value="this">
+        <NavMenu />
+    </CascadingValue>
+
+    <UserComponent @ref="UserComponentRef" />
 
     <main>
 
@@ -43,6 +47,8 @@
     [Inject]
     protected IJSRuntime? JS { get; set; }
 
+    private UserComponent? UserComponentRef { get; set; }
+
     protected override void OnInitialized()
     {
         NavigationManager.LocationChanged += ScrollToTop;
@@ -55,5 +61,10 @@
         {
             JS.InvokeVoidAsync("ScrollToTop");
         }
+    }
+
+    public void ToggleLogin(bool state)
+    {
+        UserComponentRef?.ShowMenu();
     }
 }

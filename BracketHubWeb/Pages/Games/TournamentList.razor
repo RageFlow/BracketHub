@@ -14,7 +14,9 @@
 	</div>
 </div>
 
-<TournamentGridComponent Title="Tournaments" IsGamePage="true" Tournaments="GameService.Tournaments?.Where(x => x.GameType == Type).ToList()" />
+<TournamentGridComponent Title="Tournaments" IsGamePage="true" Tournaments="GameService.Tournaments?.Where(x => x.GameType == Type).ToList()">
+	<a href="@Tournament.EditTournament.NavigateMe(Type ?? "OTHER")" class="a-button" style="position: absolute; top: 0; right: 0;">Create</a>
+</TournamentGridComponent>
 
 @code {
 	public static string NavigateMe(string type) => $"games/{type}";

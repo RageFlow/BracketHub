@@ -29,3 +29,46 @@
     border-radius: var(--border-radius);
     background: rgba(50,50,50,0.9);
 }
+
+form {
+    .validation-errors{
+        display: none;
+    }
+
+    > div {
+        position: relative;
+        display: flex;
+    }
+
+    label {
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        transform: translateY(-50%);
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 0.5rem;
+        background-color: var(--background-gray-1);
+        border-radius: var(--border-radius);
+        border: none;
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1;
+
+        &.invalid{
+            border: 1px solid red;
+        }
+
+        &[type="checkbox"] {
+            flex: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            aspect-ratio: 1;
+            outline: none;
+        }
+    }
+}

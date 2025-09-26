@@ -94,11 +94,18 @@
 
 	protected override void OnInitialized()
 	{
-		if (Tournament.IsNotNull() && Tournament.Matches.IsNotNull())
+		if (Tournament.IsNotNull())
 		{
-			Matches = Tournament.Matches;
+			if (Tournament.Matches.IsNotNull())
+			{
+				Matches = Tournament.Matches;
+			}
+			// Matches = null;
 
 			MemberList = Tournament.Members?.ToDictionary(x => x.Id);
+
+			// Will only execute internal if no matches are present
+			FillExpectedMatches();
 		}
 
 		if (Matches.IsNotNull())
@@ -109,6 +116,33 @@
 		}
 
 		base.OnInitialized();
+	}
+
+	private void FillExpectedMatches()
+	{
+		if (Matches == null && MemberList.IsNotNull() && MemberList.Count > 0)
+		{
+			Matches ??= new();
+
+			MatchModel? currentMatch = null;
+			int currentMatchId = 1;
+			for (int i = 0; i < MemberList.Count; i++)
+			{
+				if (!currentMatch.IsNotNull())
+				{
+					currentMatch = new MatchModel(0, Status.TBD, 1, currentMatchId, [0], null, null, null);
+					currentMatchId++;
+				}
+				else if(currentMatch.Members != null)
+					currentMatch.Members = currentMatch.Members.Concat([0]).ToArray();
+
+				if (i == MemberList.Count || currentMatch.Members != null && currentMatch.Members.Length >= 2)
+				{
+					Matches.Add(currentMatch);
+					currentMatch = null;
+				}
+			}
+		}
 	}
 
 	private void CheckNext(List<MatchModel> matches, int round, int? maxNum = null)
@@ -126,7 +160,8 @@
 		int expectedMax = matchNumber;
 
 		int? singleMatch = null;
-		if (currentMatches.Count % 3 == 0)
+		var ko = currentMatches.Count % 2;
+		if (currentMatches.Count % 2 == 1)
 		{
 			expectedMax = matchNumber + (currentMatches.Count + 1) / 2;
 			singleMatch = expectedMax;

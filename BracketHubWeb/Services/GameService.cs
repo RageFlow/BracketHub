@@ -96,7 +96,7 @@ namespace BracketHubWeb.Services
             }
         }
 
-        public async Task<bool?> UpdateTournament(AdvancedTournamentModel model)
+        public async Task<bool> UpdateTournament(AdvancedTournamentModel model)
         {
             var tournament = await APIClient.PutTournament(model);
             if (tournament != null && (Tournament == null || Tournament.Id == tournament.Id))
@@ -105,6 +105,17 @@ namespace BracketHubWeb.Services
             }
 
             return tournament.IsNotNull();
+        }
+
+        public async Task<bool> JoinTournament(TournamentMemberLink model)
+        {
+            if (model.MemberId.IsNotNull() && model.TournamentId.IsNotNull())
+            {
+                var tournament = await APIClient.AddTournamentMember(model);
+                Tournament = tournament;
+                return Tournament.IsNotNull();
+            }
+            return false;
         }
 
         public void Search(string args)

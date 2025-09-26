@@ -1,0 +1,152 @@
+﻿@using BracketHubShared.CRUD
+
+@if (Visible)
+{
+	<div class="page-user-container">
+
+		<div class="page-user-blocker" @onclick="HideMenu"></div>
+
+		<div class="page-user-window">
+
+			<button class="window-close" @onclick="HideMenu">
+				<i class="fa-solid fa-x"></i>
+			</button>
+
+			@if (ErrorMessage.IsNotNull())
+			{
+				<span class="error-message">@ErrorMessage</span>
+			}
+
+			@if (UserService.CurrentMember != null)
+			{
+				<div class="user-functions">
+					<span>@UserService.CurrentMember.Id</span>
+					<span>@UserService.CurrentMember.Name</span>
+					<span>@UserService.CurrentMember.Nickname</span>
+
+					<button @onclick="SignOut">
+						Sign out
+					</button>
+				</div>
+			}
+			else
+			{
+				<div class="user-functions">
+
+					@if (IsLogin)
+					{
+						<h4>Sign in</h4>
+						<EditForm Model="ReadModel" OnValidSubmit="Signin" FormName="Signin">
+							<DataAnnotationsValidator />
+							<div class="user-value">
+								<label>
+									User Id
+								</label>
+								<InputNumber @bind-Value="ReadModel.Id" />
+							</div>
+
+							<button type="submit">
+								Login
+							</button>
+						</EditForm>
+						<button type="button" @onclick="ChangeType">
+							Change to Signup
+						</button>
+					}
+					else
+					{
+						<h4>Sign up</h4>
+						<EditForm Model="CreateModel" OnValidSubmit="Signup" FormName="Signup">
+							<DataAnnotationsValidator />
+							<div class="user-value">
+								<label>
+									Name*
+								</label>
+								<InputText @bind-Value="CreateModel.Name" />
+							</div>
+
+							<div class="user-value">
+								<label>
+									Nickname*
+								</label>
+								<InputText @bind-Value="CreateModel.Nickname" />
+							</div>
+
+							<button type="submit">
+								Sign up
+							</button>
+						</EditForm>
+						<button type="button" @onclick="ChangeType">
+							Change to Login
+						</button>
+					}
+				</div>
+			}
+
+		</div>
+
+	</div>
+}
+
+
+@code {
+	private bool Visible { get; set; }
+
+	private MemberCreateModel CreateModel { get; set; } = new()
+	{
+		Name = string.Empty,
+		Nickname = string.Empty
+	};
+
+	private MemberReadModel ReadModel { get; set; } = new();
+
+	private string? ErrorMessage { get; set; }
+
+	private bool IsLogin { get; set; } = true;
+
+	public void ShowMenu()
+	{
+		Visible = true;
+		StateHasChanged();
+	}
+
+	public void HideMenu()
+	{
+		Visible = false;
+		StateHasChanged();
+	}
+
+	private void ChangeType()
+	{
+		IsLogin = !IsLogin;
+		StateHasChanged();
+	}
+
+	private void SignOut()
+	{
+		UserService.SignOut();
+		StateHasChanged();
+	}
+
+	private async Task Signin()
+	{
+		ErrorMessage = null;
+		await UserService.Signin(ReadModel);
+
+		if (UserService.CurrentMember.IsNotNull() && UserService.CurrentMember.Id == ReadModel.Id)
+			StateHasChanged();
+		else
+			ErrorMessage = "Something went wrong!";
+	}
+
+	private async Task Signup()
+	{
+		ErrorMessage = null;
+		await UserService.Signup(CreateModel);
+
+		if (UserService.CurrentMember.IsNotNull() && UserService.CurrentMember.Name == CreateModel.Name)
+			StateHasChanged();
+		else
+			ErrorMessage = "Something went wrong!";
+	}
+}

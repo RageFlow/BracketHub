@@ -123,13 +123,13 @@ namespace BracketHubAPI.Controllers
                     Name = model.Name,
                 }).Entity;
 
-                tournament.Type = model.GameType;
+                tournament.Type = string.IsNullOrEmpty(model.GameType) ? "OTHER" : model.GameType;
                 tournament.Status = model.Status;
                 tournament.Name = model.Name;
-                tournament.Banner = model.Banner;
+                tournament.Banner = string.IsNullOrEmpty(model.Banner) ? null : model.Banner;
                 tournament.Date = model.Date;
                 tournament.IsPublic = model.IsPublic;
-                tournament.Description = model.Description;
+                tournament.Description = string.IsNullOrEmpty(model.Description) ? null : model.Description;
 
                 await context.SaveChangesAsync(cancellationToken);
 
@@ -139,7 +139,7 @@ namespace BracketHubAPI.Controllers
         }
 
         [HttpPut(nameof(AddTournamentMember))]
-        public async Task<ActionResult<AdvancedTournamentModel?>> AddTournamentMember([FromBody] TournamentMemberLink model, CancellationToken cancellationToken = default)
+        public async Task<ActionResult> AddTournamentMember([FromBody] TournamentMemberLink model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -158,7 +158,7 @@ namespace BracketHubAPI.Controllers
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return await GetTournament(model.TournamentId, cancellationToken);
+                return Ok();
             }
         }
         #endregion
@@ -217,11 +217,11 @@ namespace BracketHubAPI.Controllers
 
         #region Member (Signup & Signin)
         [HttpPut(nameof(MemberSignup))]
-        public async Task<MemberModel> MemberSignup([FromBody] MemberCRUDModel model, CancellationToken cancellationToken = default)
+        public async Task<MemberModel> MemberSignup([FromBody] MemberCreateModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                var member = await context.Members.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Name == model.Name, cancellationToken);
 
                 member ??= context.Members.Add(new Member()
                 {
@@ -238,7 +238,7 @@ namespace BracketHubAPI.Controllers
             }
         }
         [HttpPost(nameof(MemberSignin))]
-        public async Task<MemberModel?> MemberSignin([FromBody] MemberCRUDModel model, CancellationToken cancellationToken = default)
+        public async Task<MemberModel?> MemberSignin([FromBody] MemberReadModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {

@@ -58,9 +58,10 @@
 
                     &[single-team] {
                         height: calc(var(--team-height) + 0.25rem);
-                        margin: calc(var(--team-height) / 2) 0;
+                        /*margin: calc(var(--team-height) / 2) 0;
                         margin: calc(var(--team-height) / 2 * 1.75) 0 calc(var(--team-height) / 2 * 0.5) 0;
-                        margin: calc(var(--team-height) + 0.25rem) 0 0 0;
+                        margin: calc(var(--team-height) + 0.25rem) 0 0 0;*/
+                        margin: calc((var(--team-height) + 0.25rem) / 2 - 1px) 0 calc((var(--team-height) + 0.25rem) / 2 + 1px) 0;
 
                         > a {
                             border-radius: var(--border-radius) !important;
@@ -115,7 +116,8 @@
                         height: calc(var(--team-height) * 2 + 0.4rem);
 
                         &[single-team] {
-                            height: calc(var(--team-height) * 2 + 0.4rem + var(--team-height) / 2);
+                            /*height: calc(var(--team-height) * 2 + 0.4rem + var(--team-height) / 2);*/
+                            height: calc(var(--team-height) * 2 + 0.4rem);
                         }
 
                         &.up {
@@ -135,8 +137,8 @@
                         z-index: 1;
                         position: absolute;
                         bottom: 0;
-                        width: 15px;
-                        right: -16px;
+                        width: 20px;
+                        right: -21px;
 
                         &.up {
                             top: 0;

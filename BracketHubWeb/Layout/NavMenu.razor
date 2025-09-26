@@ -37,7 +37,7 @@
         <div class="nav-functions">
             <SearchComponent Placeholder="Search for a game or tournament" ValueEntered="Search" />
 
-            <button @onclick="Login">Login</button>
+            <button @onclick="ToggleLogin">Login</button>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
-            <button @onclick="Login">
+            <button @onclick="ToggleLogin">
                 <i class="fa-solid fa-user"></i>
             </button>
         </div>
@@ -102,6 +102,9 @@
 }
 
 @code {
+    [CascadingParameter]
+    public MainLayout? MainLayout { get; set; }
+
     #region
     protected override void OnInitialized()
     {
@@ -164,8 +167,8 @@
         GameService.Search(args);
     }
 
-    private void Login()
+    private void ToggleLogin()
     {
-
+        MainLayout?.ToggleLogin(true);
     }
 }

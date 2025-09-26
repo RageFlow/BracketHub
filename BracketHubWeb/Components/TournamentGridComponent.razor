@@ -1,5 +1,6 @@
 ﻿
 <div class="page-tournament-grid" page-restrict="true" style="@Style" restricted-size="@IsGamePage">
+    @ChildContent
     <h3>@Title</h3>
     <div class="tournament-grid">
         @if (Tournaments != null)
@@ -58,4 +59,7 @@
 
     [Parameter]
     public string? Style { get; set; }
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
 }

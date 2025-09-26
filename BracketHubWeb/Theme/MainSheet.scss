@@ -4,6 +4,7 @@
 @import "GamesGrid.scss";
 @import "Globals.scss";
 @import "Tournament.scss";
+@import "UserWindow.scss";
 
 :root {
     --page-max-size: 1300px;
@@ -13,6 +14,7 @@
     --background-muted: rgba(224, 224, 224, 0.4);
     --background-dark: rgba(50,50,50,0.8);
     --background-gray-1: #252525;
+    --background-gray-2: #696969;
     --text-muted: rgb(224, 224, 224);
     --text-size-1: 0.75rem;
     --text-size-2: 1rem;
@@ -88,20 +90,26 @@ a, button {
     color: var(--text-muted);
     cursor: pointer;
     text-decoration: none;
+    font-size: inherit;
 }
 
-button {
+button, .a-button {
     height: 36px;
-    padding: 0 1rem;
-    /*background: none;*/
-    /*border: 1px solid var(--background-muted);*/
+    padding: 0 0.75rem;
     background: var(--background-gray-1);
     border: none;
     transition: 0.2s ease-in-out;
     will-change: background;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     &:hover {
         background: var(--background-muted);
+    }
+
+    svg {
+        margin-bottom: 2px;
     }
 }
 
@@ -151,5 +159,23 @@ button {
     }
 
     .tournament-item-icon {
+    }
+}
+
+.page-functions {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+
+    .page-function {
+        position: absolute;
+        top: 0;
+        right: 1rem;
+        &.left{
+            left: 1rem;
+            right: auto;
+        }
     }
 }
