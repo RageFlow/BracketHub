@@ -1,4 +1,5 @@
-﻿using BracketHubShared.Models;
+﻿using BracketHubShared.Extensions;
+using BracketHubShared.Models;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -13,9 +14,16 @@ namespace BracketHubWeb.Services
             this.httpClient = httpClient;
         }
 
-        internal string GetUrlWithQuery(string url, string queryName, object query)
+        internal string GetUrlWithQuery(string url, string? queryName = null, object? query = null)
         {
-            return $"?{queryName}={query}"; // This is a bad way, but will do for Demonstration.
+            if (!string.IsNullOrEmpty(queryName) && query.IsNotNull())
+            {
+                return $"BracketHub/{url}" + ($"?{queryName}={query}"); // This is a bad way, but will do for Demonstration.
+            }
+            else
+            {
+                return $"BracketHub/{url}";
+            }
         }
 
         //using HttpResponseMessage response = await httpClient.PostAsync("todos",jsonContent);
@@ -29,7 +37,8 @@ namespace BracketHubWeb.Services
         }
         public async Task<List<GameModel>?> GetGames(CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await httpClient.GetAsync(nameof(GetGames), cancellationToken);
+            string url = GetUrlWithQuery(nameof(GetGames));
+            using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
 
             return await CheckAndConvertResult<List<GameModel>?>(response);
         }
@@ -44,13 +53,15 @@ namespace BracketHubWeb.Services
         }
         public async Task<List<GameModel>?> GetTournaments(CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await httpClient.GetAsync(nameof(GetGames), cancellationToken);
+            string url = GetUrlWithQuery(nameof(GetTournaments));
+            using HttpResponseMessage response = await httpClient.GetAsync(url, cancellationToken);
 
             return await CheckAndConvertResult<List<GameModel>?>(response);
         }
         public async Task<TournamentModel?> PutTournament(AdvancedTournamentModel tournament, CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await httpClient.PutAsync(nameof(PutTournament), SerializeModel(tournament), cancellationToken);
+            string url = GetUrlWithQuery(nameof(PutTournament));
+            using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(tournament), cancellationToken);
 
             return await CheckAndConvertResult<TournamentModel?>(response);
         }

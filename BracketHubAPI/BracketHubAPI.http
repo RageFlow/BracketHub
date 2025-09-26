@@ -1,6 +1,0 @@
-@BracketHubAPI_HostAddress = http://localhost:5017
-
-GET {{BracketHubAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

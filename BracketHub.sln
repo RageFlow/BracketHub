@@ -15,24 +15,33 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{D2674A1E-928A-4C50-B0BF-75A39A5771ED}.Test|Any CPU.Build.0 = Test|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{218F601A-B972-4E70-80B3-F322E04ED72E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{218F601A-B972-4E70-80B3-F322E04ED72E}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{218F601A-B972-4E70-80B3-F322E04ED72E}.Test|Any CPU.Build.0 = Test|Any CPU
 		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{6C5692D9-4892-4AA8-B401-885824BD4BD6}.Test|Any CPU.Build.0 = Test|Any CPU
 		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{FA501052-1E04-45E8-A000-F0FFF27DAB64}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

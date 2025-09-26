@@ -31,7 +31,7 @@
     {
         if (firstRender)
         {
-            var ko = await APIClient.GetGames();
+            GameService.Games = await APIClient.GetGames();
         }
 
         await base.OnAfterRenderAsync(firstRender);

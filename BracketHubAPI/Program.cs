@@ -12,10 +12,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
+#if Release
             policy.WithOrigins("https://gregerdesign.dk");
+#else
+            policy.WithOrigins("https://localhost:7140");
+#endif
         });
 });
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,7 +27,6 @@ builder.Services.AddSwaggerGen();
 // Factory instead og normal Context
 builder.Services.AddDbContextFactory<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
 //builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
-//builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;"));
 
 var app = builder.Build();
 
