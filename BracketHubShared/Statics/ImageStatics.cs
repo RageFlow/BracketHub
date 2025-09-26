@@ -13,7 +13,7 @@ namespace BracketHubShared.Statics
         {
             if (url.IsNotNull() && url.StartsWith("banner:"))
             {
-                return BannerUrl(url.Substring(6, url.Length));
+                return BannerUrl(url.Substring(7));
             }
             else
             {
