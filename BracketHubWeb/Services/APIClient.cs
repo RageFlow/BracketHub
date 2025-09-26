@@ -1,4 +1,5 @@
-﻿using BracketHubShared.Extensions;
+﻿using BracketHubShared.CRUD;
+using BracketHubShared.Extensions;
 using BracketHubShared.Models;
 using Newtonsoft.Json;
 using System.Text;
@@ -82,6 +83,38 @@ namespace BracketHubWeb.Services
             using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(tournament), cancellationToken);
 
             return await CheckAndConvertResult<AdvancedTournamentModel?>(response);
+        }
+        public async Task<AdvancedTournamentModel?> AddTournamentMember(TournamentMemberLink tournamentMemberLink, CancellationToken cancellationToken = default)
+        {
+            string url = GetUrlWithQuery(nameof(AddTournamentMember));
+            using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(tournamentMemberLink), cancellationToken);
+
+            return await CheckAndConvertResult<AdvancedTournamentModel?>(response);
+        }
+
+
+        public async Task<bool?> PutMatch(MatchModel match, CancellationToken cancellationToken = default)
+        {
+            string url = GetUrlWithQuery(nameof(PutMatch));
+            using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(match), cancellationToken);
+
+            return response.IsSuccessStatusCode;
+        }
+
+
+        public async Task<MemberModel?> MemberSignup(MemberCRUDModel member, CancellationToken cancellationToken = default)
+        {
+            string url = GetUrlWithQuery(nameof(MemberSignup));
+            using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(member), cancellationToken);
+
+            return await CheckAndConvertResult<MemberModel?>(response);
+        }
+        public async Task<MemberModel?> MemberSignin(MemberCRUDModel member, CancellationToken cancellationToken = default)
+        {
+            string url = GetUrlWithQuery(nameof(MemberSignin));
+            using HttpResponseMessage response = await httpClient.PostAsync(url, SerializeModel(member), cancellationToken);
+
+            return await CheckAndConvertResult<MemberModel?>(response);
         }
 
 

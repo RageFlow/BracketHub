@@ -1,0 +1,132 @@
+﻿@inherits TournamentPage
+@page "/games/{Type}/newTournament"
+@page "/games/{Type}/{TournamentId:int}/edit"
+
+<PageTitle>@EditOrCreate Tournament - @Type</PageTitle>
+
+<div class="page-background" style="@BackgroundUrlStyle"></div>
+
+@* <div class="page-top-section" page-restrict="true">
+	<div>
+		<h2>@EditOrCreate Tournament</h2>
+	</div>
+</div> *@
+
+<div class="tournament-page-content" page-restrict="true">
+	<div class="edit-tournament-data">
+		<EditForm Model="TournamentModel" OnValidSubmit="Submit" FormName="Tournament">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+			@if (TournamentModel != null)
+			{
+				<div class="tournament-value tournament-small">
+					<h2>@EditOrCreate Tournament - @Type</h2>
+				</div>
+			
+				<div class="tournament-value tournament-small">
+					<button>@EditOrCreate</button>
+				</div>
+			
+				<div class="tournament-value">
+					<label>
+						Name:
+						<InputTextArea @bind-Value="TournamentModel.Name" />
+					</label>
+				</div>
+			
+				<div class="tournament-value tournament-small">
+					<label>
+						Game Type:
+						<InputTextArea @bind-Value="TournamentModel.GameType" disabled="true" />
+					</label>
+				</div>
+			
+				<div class="tournament-value tournament-small">
+					<label>
+						Status:
+						<InputSelect TValue="Status" @bind-Value="TournamentModel.Status">
+							@* <option value="">
+								Select Status
+							</option> *@
+							@foreach (Status status in (Status[])Enum.GetValues(typeof(Status)))
+							{
+								<option checked="@(TournamentModel.Status == status)" value="@status">
+									@status.ToString();
+								</option>
+							}
+						</InputSelect>
+					</label>
+				</div>
+
+				<div class="tournament-value">
+					<label>
+						Banner:
+						<InputTextArea @bind-Value="TournamentModel.Banner" />
+					</label>
+				</div>
+			
+				<div class="tournament-value tournament-small">
+					<label>
+						Date:
+						<InputDate @bind-Value="TournamentModel.Date" />
+					</label>
+				</div>
+			
+				<div class="tournament-value tournament-small">
+					<label>
+						Is Public:
+						<InputCheckbox @bind-Value="TournamentModel.IsPublic" />
+					</label>
+				</div>
+			
+				<div class="tournament-value tournament-large">
+					<label>
+						Description:
+						<InputTextArea @bind-Value="TournamentModel.Description" />
+					</label>
+				</div>
+			}
+		</EditForm>
+	</div>
+</div>
+
+@code {
+	private string EditOrCreate => GameService.Tournament != null ? "Edit" : "Create";
+
+	private AdvancedTournamentModel? TournamentModel { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender) // Jank but works without too much work
+		{
+			if (GameService.GameTask != null)
+				await GameService.GameTask;
+
+			if (GameService?.TournamentTask != null)
+				await GameService.TournamentTask;
+
+			SetTournament();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
+	}
+
+	private void SetTournament()
+	{
+		TournamentModel = GameService.Tournament ?? new();
+		TournamentModel.GameType ??= Type ?? "OTHER";
+
+		StateHasChanged();
+	}
+
+	private async Task Submit()
+	{
+		if (TournamentModel.IsNotNull())
+		{
+			var updated = GameService.UpdateTournament(TournamentModel);
+
+			if (updated != null)
+				SetTournament();
+		}
+	}
+}

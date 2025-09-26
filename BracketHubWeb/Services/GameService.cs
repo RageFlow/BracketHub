@@ -96,6 +96,17 @@ namespace BracketHubWeb.Services
             }
         }
 
+        public async Task<bool?> UpdateTournament(AdvancedTournamentModel model)
+        {
+            var tournament = await APIClient.PutTournament(model);
+            if (tournament != null && (Tournament == null || Tournament.Id == tournament.Id))
+            {
+                Tournament = tournament;
+            }
+
+            return tournament.IsNotNull();
+        }
+
         public void Search(string args)
         {
             if (!string.IsNullOrEmpty(args))

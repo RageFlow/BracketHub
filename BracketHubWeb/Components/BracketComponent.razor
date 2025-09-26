@@ -46,9 +46,9 @@
 										<span>@match.MatchNumber</span>
 									</div>
 									<div style="z-index: 2; position: absolute; top: -10px; right: 0;">
-										@if (match.ParentMatchess.IsNotNull())
+										@if (match.ParentMatches.IsNotNull())
 										{
-											foreach (var item in match.ParentMatchess)
+											foreach (var item in match.ParentMatches)
 											{
 												<span style="margin-right: 10px">@item</span>
 											}

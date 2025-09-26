@@ -2,10 +2,12 @@
 using BracketHubDatabase.Entities;
 using BracketHubDatabase.Extensions;
 using BracketHubShared.CRUD;
+using BracketHubShared.Extensions;
 using BracketHubShared.Models;
 using BracketHubShared.Statics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace BracketHubAPI.Controllers
 {
@@ -21,33 +23,35 @@ namespace BracketHubAPI.Controllers
             _contextFactory = contextFactory;
         }
 
+#region Game
         [HttpGet(nameof(GetGame))]
-        public GameModel? GetGame([FromQuery] string type)
+        public async Task<GameModel?> GetGame([FromQuery] string type, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return context.Games.Where(x => x.Type == type)
+                return await context.Games.Where(x => x.Type == type)
                     .Select(x => new GameModel(x.Name, x.Type, x.Description))
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync(cancellationToken);
             }
         }
         
         [HttpGet(nameof(GetGames))]
-        public IEnumerable<GameModel> GetGames()
+        public async Task<IEnumerable<GameModel>> GetGames(CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return context.Games.Select(x => new GameModel(x.Name, x.Type, x.Description)).ToList();
+                return await context.Games.Select(x => new GameModel(x.Name, x.Type, x.Description)).ToListAsync(cancellationToken);
             }
         }
-        
-        
+#endregion
+
+#region Tournament
         [HttpGet(nameof(GetTournament))]
-        public AdvancedTournamentModel? GetTournament([FromQuery] int id)
+        public async Task<AdvancedTournamentModel?> GetTournament([FromQuery] int id, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return context.Tournaments.Where(x => x.Id == id).Select(x => new AdvancedTournamentModel()
+                return await context.Tournaments.Where(x => x.Id == id).Select(x => new AdvancedTournamentModel()
                 {
                     Id = x.Id,
                     GameType = x.Type,
@@ -65,21 +69,21 @@ namespace BracketHubAPI.Controllers
                         MatchNumber = m.MatchNumber,
                         Winner = m.Winner,
                         Members = m.Members != null ? m.Members.Select(mem => mem.Id).ToArray() : null,
-                        ParentMatchess = m.ParentMatches != null ? m.ParentMatches.Select(pm => pm.Id).ToArray() : null,
+                        ParentMatches = m.ParentMatches != null ? m.ParentMatches.Select(pm => pm.Id).ToArray() : null,
                         ChildMatch = m.ChildMatch != null ? m.ChildMatch.Id : null
                     }).ToList() : null
-                }).FirstOrDefault();
+                }).FirstOrDefaultAsync(cancellationToken);
             }
         }
         
         [HttpGet(nameof(GetTournaments))]
-        public IEnumerable<TournamentModel> GetTournaments([FromQuery] string? type = null)
+        public async Task<IEnumerable<TournamentModel>> GetTournaments([FromQuery] string? type = null, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
                 if (!string.IsNullOrEmpty(type))
                 {
-                    return context.Tournaments.Where(x => x.Type == type).Select(x => new TournamentModel()
+                    return await context.Tournaments.Where(x => x.Type == type).Select(x => new TournamentModel()
                     {
                         Id = x.Id,
                         GameType = x.Type,
@@ -88,11 +92,11 @@ namespace BracketHubAPI.Controllers
                         Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
-                    }).ToList();
+                    }).ToListAsync(cancellationToken);
                 }
                 else
                 {
-                    return context.Tournaments.Select(x => new TournamentModel()
+                    return await context.Tournaments.Select(x => new TournamentModel()
                     {
                         Id = x.Id,
                         GameType = x.Type,
@@ -101,17 +105,17 @@ namespace BracketHubAPI.Controllers
                         Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
-                    }).Take(10).ToList();
+                    }).Take(10).ToListAsync(cancellationToken);
                 }
             }
         }
 
-        [HttpPost(nameof(PutTournament))]
-        public async Task<TournamentModel?> PutTournament(AdvancedTournamentModel model)
+        [HttpPut(nameof(PutTournament))]
+        public async Task<ActionResult<TournamentModel?>> PutTournament([FromBody] AdvancedTournamentModel model, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                var tournament = context.Tournaments.FirstOrDefault(x => x.Id == model.Id);
+                var tournament = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
 
                 tournament ??= context.Tournaments.Add(new Tournament()
                 {
@@ -127,20 +131,97 @@ namespace BracketHubAPI.Controllers
                 tournament.IsPublic = model.IsPublic;
                 tournament.Description = model.Description;
 
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
 
                 return tournament.Convert();
 
             }
         }
 
-        #region Member (Signup & Signin)
-        [HttpPut(nameof(MemberSignup))]
-        public async Task<MemberModel> MemberSignup(MemberCRUDModel model)
+        [HttpPut(nameof(AddTournamentMember))]
+        public async Task<ActionResult<AdvancedTournamentModel?>> AddTournamentMember([FromBody] TournamentMemberLink model, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                var member = context.Members.FirstOrDefault(x => x.Id == model.Id);
+                var tournament = await context.Tournaments.Include(x => x.Members).FirstOrDefaultAsync(x => x.Id == model.TournamentId, cancellationToken);
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Id == model.MemberId, cancellationToken);
+
+                if (tournament == null || member == null)
+                    return NotFound("Member or Tournament was not found!");
+
+                tournament.Members ??= new();
+
+                if (tournament.Members.Contains(member))
+                    return Conflict("Member is already a part of this Tournament!");
+
+                tournament.Members.Add(member);
+
+                await context.SaveChangesAsync(cancellationToken);
+
+                return await GetTournament(model.TournamentId, cancellationToken);
+            }
+        }
+        #endregion
+
+
+        [HttpPut(nameof(PutMatch))]
+        public async Task<ActionResult> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken)
+        {
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                // Include is very slow when a large amount of data needs to be fetched.
+                var match = await context.Matches
+                    .Include(x => x.Members)
+                    .Include(x => x.ParentMatches)
+                    .Include(x => x.ChildMatch)
+                    .Include(x => x.Tournament)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
+
+                match ??= context.Matches.Add(new Match()).Entity;
+
+                match.Status = model.Status;
+                match.Round = model.Round;
+                match.MatchNumber = model.MatchNumber;
+                match.Winner = model.Winner;
+
+                // Members - Bad way to set list, but for this scenario it should be fine
+                if (model.Members != null && model.Members.Length > 0)
+                    match.Members = await context.Members.Where(x => model.Members.Contains(x.Id)).ToListAsync(cancellationToken);
+                else
+                    match.Members = null;
+                
+                // ParentMatches - Bad way to set list, but for this scenario it should be fine
+                if (model.ParentMatches != null && model.ParentMatches.Length > 0)
+                    match.ParentMatches = await context.Matches.Where(x => model.ParentMatches.Contains(x.Id)).ToListAsync(cancellationToken);
+                else
+                    match.ParentMatches = null;
+
+                // Child match
+                if (model.ChildMatch != null && (!match.ChildMatch.IsNotNull() || match.ChildMatch.Id != model.ChildMatch))
+                    match.ChildMatch = await context.Matches.FirstOrDefaultAsync(x => x.Id == model.ChildMatch, cancellationToken);
+                else
+                    match.ChildMatch = null;
+                
+                // Tournament
+                if (model.Tournament != null && (!match.Tournament.IsNotNull() || match.Tournament.Id != model.Tournament))
+                    match.Tournament = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Tournament, cancellationToken);
+                else
+                    match.Tournament = null;
+
+                await context.SaveChangesAsync(cancellationToken);
+
+                return Ok();
+            }
+        }
+
+
+        #region Member (Signup & Signin)
+        [HttpPut(nameof(MemberSignup))]
+        public async Task<MemberModel> MemberSignup([FromBody] MemberCRUDModel model, CancellationToken cancellationToken)
+        {
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
 
                 member ??= context.Members.Add(new Member()
                 {
@@ -151,21 +232,21 @@ namespace BracketHubAPI.Controllers
                 member.Name = model.Nickname;
                 member.Nickname = model.Nickname;
 
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
 
                 return member.Convert();
             }
         }
         [HttpPost(nameof(MemberSignin))]
-        public MemberModel? MemberSignin(MemberCRUDModel model)
+        public async Task<MemberModel?> MemberSignin([FromBody] MemberCRUDModel model, CancellationToken cancellationToken)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                var member = context.Members.FirstOrDefault(x => x.Id == model.Id);
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
 
                 return member?.Convert();
             }
         }
-        #endregion
+#endregion
     }
 }

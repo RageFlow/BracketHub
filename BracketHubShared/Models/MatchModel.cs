@@ -16,7 +16,7 @@ namespace BracketHubShared.Models
 
             // Links
             Members = members;
-            ParentMatchess = parentMatches;
+            ParentMatches = parentMatches;
             ChildMatch = childMatch;
         }
         public MatchModel()
@@ -31,9 +31,11 @@ namespace BracketHubShared.Models
         public int? Round { get; set; }
         public int? MatchNumber { get; set; }
         public int? Winner { get; set; }
+        
+        public int? Tournament { get; set; }
 
         public int[]? Members { get; set; }
-        public int[]? ParentMatchess { get; set; }
+        public int[]? ParentMatches { get; set; }
         public int? ChildMatch { get; set; }
     }
 
