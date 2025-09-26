@@ -109,7 +109,7 @@ namespace BracketHubWeb.Services
 
             return await CheckAndConvertResult<MemberModel?>(response);
         }
-        public async Task<MemberModel?> MemberSignin(MemberCreateUpdateModel member, CancellationToken cancellationToken = default)
+        public async Task<MemberModel?> MemberSignin(MemberReadModel member, CancellationToken cancellationToken = default)
         {
             string url = GetUrlWithQuery(nameof(MemberSignin));
             using HttpResponseMessage response = await httpClient.PostAsync(url, SerializeModel(member), cancellationToken);
