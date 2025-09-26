@@ -21,7 +21,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
+// Factory instead og normal Context
+builder.Services.AddDbContextFactory<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
+//builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=SERVER-A6;Database=BracketHub;TrustServerCertificate=True;Trusted_Connection=True;"));
 //builder.Services.AddDbContext<BrackethubContext>(option => option.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;"));
 
 var app = builder.Build();
