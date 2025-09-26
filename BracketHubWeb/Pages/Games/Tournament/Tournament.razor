@@ -67,9 +67,14 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && GameService?.TournamentTask != null)
+		if (firstRender) // Jank but works without too much work
 		{
-			await GameService.TournamentTask;
+			if (GameService.GameTask != null)
+				await GameService.GameTask;
+
+			if (GameService?.TournamentTask != null)
+				await GameService.TournamentTask;
+
 			StateHasChanged();
 		}
 

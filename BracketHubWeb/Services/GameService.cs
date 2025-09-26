@@ -24,6 +24,7 @@ namespace BracketHubWeb.Services
         public static AdvancedTournamentModel? Tournament { get; private set; }
         public static List<TournamentModel>? Tournaments { get; private set; }
 
+        public Task? GameTask { get; private set; }
         public Task? TournamentTask { get; private set; }
 
         public async Task CheckRoute(RouteData routedata)
@@ -39,7 +40,8 @@ namespace BracketHubWeb.Services
             if (type != Type)
             {                
                 Type = type;
-                await GetGame();
+                GameTask = GetGame();
+                await GameTask;
             }
 
             int? tournamentId = null;
