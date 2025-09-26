@@ -67,7 +67,12 @@ namespace BracketHubWeb.Services
 
         public async Task GetGame()
         {
-            Game = Type.IsNotNull() ? await APIClient.GetGame(Type) : null;
+            Game = Type.IsNotNull() && Games != null ? Games.FirstOrDefault(x => x.Type == Type) : null;
+
+            if (Type.IsNotNull() && !Game.IsNotNull())
+            {
+                Game = await APIClient.GetGame(Type);
+            }
         }
 
         public async Task GetGames()
