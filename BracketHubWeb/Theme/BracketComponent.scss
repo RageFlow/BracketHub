@@ -1,0 +1,301 @@
+﻿
+.bracket-component {
+    --bracket-h-spacing: 2rem;
+    --bracket-v-spacing: 0.5rem;
+    --team-height: 2rem;
+}
+
+.bracket-component {
+    display: flex;
+    flex-direction: column;
+    background: var(--background-dark);
+    border-radius: var(--border-radius);
+    gap: 1rem;
+    padding: 1rem;
+    overflow: auto;
+    width: calc(100% - 2rem);
+
+    .bracket-component-header {
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .bracket-component-view {
+        display: flex;
+
+        .bracket {
+            display: flex;
+            flex-direction: column;
+            padding-right: var(--bracket-h-spacing);
+
+            .bracket-header {
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .bracket-list {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+
+                &[round-number="1"] {
+                    margin: 0 !important;
+                }
+
+                &[round-number="2"] {
+                    margin-top: 2.75rem !important;
+                }
+
+                &[round-offset="0"] {
+                    margin-top: calc(var(--roundsize) * 4.75rem);
+
+                    .round-match {
+                        margin-top: calc((2rem + 1.25rem) + (2rem + 1.25rem));
+
+                        .exit {
+                            height: calc(var(--team-height) * 2 + 0.4rem);
+                        }
+                    }
+                }
+
+                &[round-offset="1"] {
+                    margin-top: calc(2.75rem * var(--roundsize));
+
+                    .round-match {
+                        margin-top: calc(2 * (3.25rem + 3.25rem + 2.25rem));
+
+                        &[single-team] {
+                            margin-top: 8.75rem;
+
+                            .exit {
+                                height: 0 !important;
+                            }
+                        }
+
+                        .exit {
+                            height: 9.75rem;
+                        }
+                    }
+                }
+
+                .round-match {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: calc(var(--team-height) * 2 + 0.5rem);
+
+                    &[single-team] {
+                        height: var(--team-height);
+
+                        > a {
+                            border-radius: var(--border-radius) !important;
+                        }
+                    }
+
+                    &:first-of-type {
+                        margin: 0;
+                    }
+
+                    &.highlight {
+                        .exit, .entry {
+                            border-color: var(--outline-color) !important;
+                            border-width: 2px !important;
+                        }
+                    }
+
+                    > a {
+                        display: flex;
+                        background: var(--background-dark);
+                        outline: var(--outline-color) 1px solid;
+                        padding: 0 0.5rem;
+                        flex: 1;
+                        align-items: center;
+                        width: 10rem;
+                        cursor: default;
+
+                        &:nth-child(2n+1) {
+                            border-radius: var(--border-radius) var(--border-radius) 0 0;
+                        }
+
+                        &:nth-child(2n) {
+                            border-radius: 0 0 var(--border-radius) var(--border-radius);
+                        }
+
+                        &.highlight {
+                            background: var(--color-back-3);
+                            background: var(--outline-color);
+                        }
+
+                        &.winner {
+                            z-index: 1;
+                            border-left: 5px solid green;
+                        }
+
+                        &.loser {
+                            z-index: 1;
+                            border-left: 5px solid red;
+                        }
+                    }
+
+                    .exit {
+                        pointer-events: none;
+                        z-index: 0;
+                        position: absolute;
+                        width: calc(var(--bracket-h-spacing) / 2);
+                        right: calc(var(--bracket-h-spacing) / -2);
+                        /*height: calc(var(--team-height) * 2 + 0.4rem);*/
+
+                        &.up {
+                            bottom: 50%;
+                            border-bottom: 1px solid var(--link-color);
+                            border-right: 1px solid var(--link-color);
+                        }
+
+                        &.down {
+                            top: calc(50% - 1px);
+                            border-top: 1px solid var(--link-color);
+                            border-right: 1px solid var(--link-color);
+                        }
+                    }
+
+                    .entry {
+                        z-index: 1;
+                        position: absolute;
+                        bottom: 0;
+                        width: 20px;
+                        right: -21px;
+
+                        &.up {
+                            top: 0;
+                            border-top: 1px solid var(--link-color);
+                        }
+
+                        &.down {
+                            border-bottom: 1px solid var(--link-color);
+                        }
+                    }
+                }
+            }
+        }
+
+            .bracket[round-number="1"] {
+                .bracket-list {
+                    gap: 1rem;
+
+                    .round-match {
+                        margin: 0 !important;
+
+                        .exit {
+                            height: calc(var(--bracket-v-spacing) / 2 + var(--team-height) / 2 + 0.4rem) !important;
+                        }
+                    }
+                }
+            }
+    }
+
+    &[edit-enabled="true"] {
+        .bracket-component-view {
+            .bracket{
+                .bracket-list{
+                    .round-match {
+                        border: 2px solid lightblue;
+                        border-radius: var(--border-radius);
+
+                        > a {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.page-window-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+
+    .page-window-blocker {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0,0,0,0.4);
+    }
+
+    .page-window-window {
+        position: absolute;
+        top: 40%;
+        right: 50%;
+        transform: translate(50%, -50%);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        background: var(--background-gray-2);
+        min-width: 200px;
+        max-width: 90%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        > h4 {
+            text-align: center;
+            margin: 0;
+        }
+
+        .window-close {
+            position: absolute;
+            top: 0.3rem;
+            right: 0.25rem;
+            height: auto;
+            padding: 0.25rem;
+            background: none;
+        }
+
+        .window-value {
+            display: flex;
+            flex-direction: row;
+            gap: 0.25rem;
+            align-items: center;
+
+            label {
+                position: relative;
+                left: 0;
+                transform: none;
+                width: 5rem;
+            }
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 0.5rem;
+            background-color: var(--background-gray-1);
+            border-radius: var(--border-radius);
+            border: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+
+            &.invalid {
+                border: 1px solid red;
+            }
+
+            &[type="checkbox"] {
+                flex: 0;
+                width: 1.5rem;
+                height: 1.5rem;
+                aspect-ratio: 1;
+                outline: none;
+            }
+        }
+    }
+}

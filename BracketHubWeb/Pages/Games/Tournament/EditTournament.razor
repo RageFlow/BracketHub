@@ -29,8 +29,8 @@
 		{
 			<EditForm Model="TournamentModel" OnValidSubmit="Submit" FormName="Tournament">
 				<DataAnnotationsValidator />
-				@* <ValidationSummary /> *@
 
+				@* <ValidationSummary /> *@
 				<div class="tournament-value tournament-small tournament-float">
 					<button type="submit"><i class="fa-solid fa-floppy-disk"></i> Save</button>
 				</div>
@@ -54,9 +54,6 @@
 						Status
 					</label>
 					<InputSelect TValue="Status" @bind-Value="TournamentModel.Status">
-						@* <option value="">
-									Select Status
-								</option> *@
 						@foreach (Status status in (Status[])Enum.GetValues(typeof(Status)))
 						{
 							<option checked="@(TournamentModel.Status == status)" value="@status">
@@ -94,9 +91,15 @@
 					<InputTextArea @bind-Value="TournamentModel.Description" />
 				</div>
 			</EditForm>
+
 		}
 	</div>
 </div>
+
+@if (TournamentModel.IsNotNull())
+{
+	<BracketComponent Tournament="TournamentModel" AllowEditing="true" />
+}
 
 @code {
 	public static string NavigateMe(string type, int? id = null) => $"games/{type}/" + (id != null ? $"{id}/edit" : "newTournament");

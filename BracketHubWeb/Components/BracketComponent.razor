@@ -1,8 +1,10 @@
 ﻿
-<div class="bracket-component" page-restrict="true">
-	@* <div class="bracket-component-header">
-		<h3>@Tournament?.Name</h3>
-	</div> *@
+<div class="bracket-component" page-restrict="true" edit-enabled="@(AllowEditing ? "true" : "false")">
+	@if (AllowEditing && GroupedMatches.IsNotNull())
+	{
+		<span>Click on a match to update its information.</span>
+		<span>It is not necessary to save the tournament when making Match changes!</span>
+	}
 	<div class="bracket-component-view" id="tournament-bracket-@Tournament?.Id">
 		@if (GroupedMatches.IsNotNull())
 		{
@@ -14,7 +16,7 @@
 					<div class="bracket-header">
 						<span>Round @group.Key</span>
 					</div>
-					<div class="bracket-list">
+					<div class="bracket-list" round-offset="@(group.Key % 2)" round-number="@group.Key" style="--roundsize: @group.Key">
 						@for (int i = 0; i < matches.Count; i++)
 						{
 							var match = matches[i];
@@ -26,7 +28,7 @@
 									foreach (var member in match.Members)
 									{
 										MemberModel model = GetMember(member);
-										<a class="@(match.Winner == member ? "winner" : match.Winner != null ? "loser" : string.Empty) tournament-member tournament-@Tournament?.Id-@model.Id" member-id="@model.Id" onmouseover="highlightMember(@Tournament?.Id, @model.Id)" onmouseleave="unhighlightMember(@Tournament?.Id)">
+										<a class="@(match.Winner == member ? "winner" : match.Winner != null ? "loser" : string.Empty) tournament-member tournament-@Tournament?.Id-@model.Id" member-id="@model.Id" @onclick="(() => MatchPlayerClicked(match))" onmouseover="highlightMember(@Tournament?.Id, @model.Id)" onmouseleave="unhighlightMember(@Tournament?.Id)">
 											<span>@model.Name</span>
 										</a>
 									}
@@ -64,12 +66,98 @@
 	</div>
 </div>
 
+@if (EditVisible)
+{
+	<div class="page-window-container">
+
+		<div class="page-window-blocker" @onclick="HideMenu"></div>
+
+		<div class="page-window-window">
+			<button class="window-close" @onclick="HideMenu">
+				<i class="fa-solid fa-x"></i>
+			</button>
+
+			<h4>Edit Match</h4>
+
+			<div class="window-value">
+				<label>
+					Member 1
+				</label>
+				<InputSelect TValue="int?" @bind-Value="Member1">
+					@if (Tournament?.Members != null)
+					{
+						foreach (MemberModel member in Tournament.Members)
+						{
+							<option checked="@(Member1 == member.Id)" value="@member.Id">
+								@member.Name
+							</option>
+						}
+					}
+				</InputSelect>
+			</div>
+
+			@if (EditModel?.Members?.Length > 1)
+			{
+				<div class="window-value">
+					<label>
+						Member 2
+					</label>
+					<InputSelect TValue="int?" @bind-Value="Member2">
+						@if (Tournament?.Members != null)
+						{
+							foreach (MemberModel member in Tournament.Members)
+							{
+								<option checked="@(Member2 == member.Id)" value="@member.Id">
+									@member.Name
+								</option>
+							}
+						}
+					</InputSelect>
+				</div>
+			}
+
+			<div class="window-value">
+				<label>
+					Winner
+				</label>
+				@if (EditModel.IsNotNull() && Member1.IsNotNull() && Member2.IsNotNull())
+				{
+					<InputSelect TValue="int?" @bind-Value="EditModel.Winner">
+						@if (Tournament?.Members != null)
+						{
+							<option checked="@(Member1 == EditModel.Winner)" value="@Member1">
+								@Tournament?.Members.FirstOrDefault(x => x.Id == Member1)?.Name
+							</option>
+							<option checked="@(Member2 == EditModel.Winner)" value="@Member2">
+								@Tournament?.Members.FirstOrDefault(x => x.Id == Member2)?.Name
+							</option>
+						}
+					</InputSelect>
+				}
+			</div>
+
+			<button @onclick="UpdateMatch">
+				Update
+			</button>
+		</div>
+
+	</div>
+}
 
 @code {
 	private bool Debug = false;
 
+	private bool EditVisible { get; set; }
+
 	[Parameter]
 	public AdvancedTournamentModel? Tournament { get; set; }
+
+	[Parameter]
+	public bool AllowEditing { get; set; }
+
+	public MatchModel? EditModel { get; set; }
+	public int? Member1 { get; set; }
+	public int? Member2 { get; set; }
 
 	private List<MatchModel>? Matches { get; set; }
 
@@ -100,7 +188,6 @@
 			{
 				Matches = Tournament.Matches;
 			}
-			// Matches = null;
 
 			MemberList = Tournament.Members?.ToDictionary(x => x.Id);
 
@@ -124,9 +211,17 @@
 		{
 			Matches ??= new();
 
+			int checkCount = MemberList.Count;
+			// 1  2 & % 4
+			if (checkCount % 8 != 0 && checkCount != 2 && checkCount != 4)
+			{
+				while (checkCount % 8 != 0 || checkCount <= 0)
+					checkCount--;
+			}
+
 			MatchModel? currentMatch = null;
 			int currentMatchId = 1;
-			for (int i = 0; i < MemberList.Count; i++)
+			for (int i = 0; i < checkCount; i++)
 			{
 				if (!currentMatch.IsNotNull())
 				{
@@ -160,7 +255,6 @@
 		int expectedMax = matchNumber;
 
 		int? singleMatch = null;
-		var ko = currentMatches.Count % 2;
 		if (currentMatches.Count % 2 == 1)
 		{
 			expectedMax = matchNumber + (currentMatches.Count + 1) / 2;
@@ -179,9 +273,14 @@
 			{
 				var num1 = currentMatches.ElementAtOrDefault(currentChecked)?.Id;
 				var num2 = currentMatches.ElementAtOrDefault(currentChecked + 1)?.Id;
+				List<int> parents = new();
+				if (num1 != null)
+					parents.Add(num1.Value);
+				if (num2 != null)
+					parents.Add(num2.Value);
 
 				// Set dummy match with TBD value for teams
-				nextMatch ??= new MatchModel(0, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], [num1 ?? 0, num2 ?? 0], null, null);
+				nextMatch ??= new MatchModel(null, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], parents.ToArray(), null, null);
 				// Add dummy match (Based on invalid Id of 0)
 
 				matches.Add(nextMatch);
@@ -192,5 +291,39 @@
 		matchNumber--;
 
 		CheckNext(matches, nextRound, matchNumber);
+	}
+
+	public void HideMenu()
+	{
+		EditModel = null;
+		Member1 = null;
+		Member2 = null;
+		EditVisible = false;
+		StateHasChanged();
+	}
+
+	private void MatchPlayerClicked(MatchModel model)
+	{
+		if (AllowEditing)
+		{
+			EditModel = model;
+
+			Member1 = EditModel.Members?.ElementAtOrDefault(0);
+			Member2 = EditModel.Members?.ElementAtOrDefault(1);
+
+			EditVisible = true;
+			StateHasChanged();
+		}
+	}
+	private async Task UpdateMatch()
+	{
+		if (EditModel.IsNotNull())
+		{
+			var updated = await GameService.PutMatch(EditModel);
+			if (updated)
+			{
+				HideMenu();
+			}
+		}
 	}
 }

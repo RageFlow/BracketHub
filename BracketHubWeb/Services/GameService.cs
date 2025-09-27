@@ -2,6 +2,7 @@
 using BracketHubShared.Models;
 using BracketHubWeb.Pages.Games;
 using Microsoft.AspNetCore.Components;
+using System.Reflection;
 
 namespace BracketHubWeb.Services
 {
@@ -116,6 +117,31 @@ namespace BracketHubWeb.Services
                 return Tournament.IsNotNull();
             }
             return false;
+        }
+
+        public async Task<bool> PutMatch(MatchModel model)
+        {
+            var match = await APIClient.PutMatch(model);
+            if (Tournament != null && match != null)
+            {
+                var existingMatch = Tournament.Matches?.FirstOrDefault(x => x.Id == match.Id);
+                if (!existingMatch.IsNotNull())
+                {
+                    Tournament.Matches ??= new();
+                    Tournament.Matches.Add(match);
+                }
+                else
+                {
+                    existingMatch.Status = match.Status;
+                    existingMatch.Round = match.Round;
+                    existingMatch.MatchNumber = match.MatchNumber;
+                    existingMatch.Winner = match.Winner;
+                    existingMatch.Members = match.Members;
+                    existingMatch.ParentMatches = match.ParentMatches;
+                    existingMatch.ChildMatch = match.ChildMatch;
+                }
+            }
+            return match.IsNotNull();
         }
 
         public void Search(string args)

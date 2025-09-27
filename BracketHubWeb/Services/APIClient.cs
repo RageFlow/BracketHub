@@ -63,6 +63,8 @@ namespace BracketHubWeb.Services
             {
                 Tournament.Matches = TestMatchModelStatics.MatchListTest;
                 Tournament.Members = MemberModelStatics.MemberList.OrderBy(x => x.Nickname).ToList();
+                //Tournament.Matches = null;
+                //Tournament.Members = MemberModelStatics.MemberList.OrderBy(x => x.Nickname).Take(9).ToList();
             }
             return Tournament;
 #else
@@ -99,12 +101,12 @@ namespace BracketHubWeb.Services
         }
 
 
-        public async Task<bool?> PutMatch(MatchModel match, CancellationToken cancellationToken = default)
+        public async Task<MatchModel?> PutMatch(MatchModel match, CancellationToken cancellationToken = default)
         {
             string url = GetUrlWithQuery(nameof(PutMatch));
             using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(match), cancellationToken);
 
-            return response.IsSuccessStatusCode;
+            return await CheckAndConvertResult<MatchModel?>(response);
         }
 
 

@@ -72,7 +72,7 @@ namespace BracketHubAPI.Controllers
                         ParentMatches = m.ParentMatches != null ? m.ParentMatches.Select(pm => pm.Id).ToArray() : null,
                         ChildMatch = m.ChildMatch != null ? m.ChildMatch.Id : null
                     }).ToList() : null,
-                    Members = x.Members != null ? x.Members.Select(m => new MemberModel(m.Id, x.Name, m.Nickname)).ToList() : null,
+                    Members = x.Members != null ? x.Members.Select(m => new MemberModel(m.Id, m.Name, m.Nickname)).ToList() : null,
                 }).FirstOrDefaultAsync(cancellationToken);
             }
         }
@@ -116,7 +116,10 @@ namespace BracketHubAPI.Controllers
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                var tournament = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
+                var tournament = await context.Tournaments
+                    .Include(x => x.Members)
+                    .Include(x => x.Matches)
+                    .FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
 
                 tournament ??= context.Tournaments.Add(new Tournament()
                 {
@@ -135,7 +138,6 @@ namespace BracketHubAPI.Controllers
                 await context.SaveChangesAsync(cancellationToken);
 
                 return tournament.Convert();
-
             }
         }
 
@@ -166,7 +168,7 @@ namespace BracketHubAPI.Controllers
 
 
         [HttpPut(nameof(PutMatch))]
-        public async Task<ActionResult> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<MatchModel?>> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken = default)
         {
             using (var context = _contextFactory.CreateDbContext())
             {
@@ -211,7 +213,7 @@ namespace BracketHubAPI.Controllers
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return Ok();
+                return match.Convert();
             }
         }
 
