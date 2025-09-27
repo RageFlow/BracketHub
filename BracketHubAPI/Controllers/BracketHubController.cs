@@ -71,7 +71,8 @@ namespace BracketHubAPI.Controllers
                         Members = m.Members != null ? m.Members.Select(mem => mem.Id).ToArray() : null,
                         ParentMatches = m.ParentMatches != null ? m.ParentMatches.Select(pm => pm.Id).ToArray() : null,
                         ChildMatch = m.ChildMatch != null ? m.ChildMatch.Id : null
-                    }).ToList() : null
+                    }).ToList() : null,
+                    Members = x.Members != null ? x.Members.Select(m => new MemberModel(m.Id, x.Name, m.Nickname)).ToList() : null,
                 }).FirstOrDefaultAsync(cancellationToken);
             }
         }
