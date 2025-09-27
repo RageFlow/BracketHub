@@ -250,7 +250,7 @@
 			{
 				if (!currentMatch.IsNotNull())
 				{
-					currentMatch = new MatchModel(0, Status.TBD, 1, currentMatchId, [0], null, null, null, Tournament?.Id);
+					currentMatch = new MatchModel(null, Status.TBD, highestCurrent, currentMatchId, [0], null, null, null, Tournament?.Id);
 					currentMatchId++;
 				}
 				else if(currentMatch.Members != null)
@@ -305,7 +305,7 @@
 					parents.Add(num2.Value);
 
 				// Set dummy match with TBD value for teams
-				nextMatch ??= new MatchModel(null, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], parents.ToArray(), null, null);
+				nextMatch ??= new MatchModel(null, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], parents.ToArray(), null, null, Tournament?.Id);
 				// Add dummy match (Based on invalid Id of 0)
 
 				matches.Add(nextMatch);
