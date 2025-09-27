@@ -344,6 +344,14 @@
 	{
 		if (EditModel.IsNotNull())
 		{
+			List<int> members = new();
+			if (Member1 != null)
+				members.Add(Member1.Value);
+			if (Member2 != null)
+				members.Add(Member2.Value);
+
+			EditModel.Members = members.ToArray();
+
 			var updated = await GameService.PutMatch(EditModel);
 			if (updated)
 			{
