@@ -9,18 +9,24 @@ namespace BracketHubWeb.Services
     public class APIClient
     {
         private readonly HttpClient httpClient;
+        private readonly IConfiguration configuration;
 
-        public APIClient(HttpClient httpClient)
+        public APIClient(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
+            this.configuration = configuration;
+
+            UrlOffset = configuration.GetSection("CustomSettings").GetValue<string?>("APIOffset");
         }
+
+        public static string? UrlOffset {get; set;}
 
         internal string GetUrlWithQuery(string url, string? queryName = null, object? query = null)
         {
             if (!string.IsNullOrEmpty(queryName) && query.IsNotNull())
-                return $"/BracketHub/{url}" + ($"?{queryName}={query}"); // This is a bad way, but will do for Demonstration.
+                return $"{UrlOffset}/BracketHub/{url}" + ($"?{queryName}={query}"); // This is a bad way, but will do for Demonstration.
             else
-                return $"/BracketHub/{url}";
+                return $"{UrlOffset}/BracketHub/{url}";
         }
 
         //using HttpResponseMessage response = await httpClient.PostAsync("todos",jsonContent);

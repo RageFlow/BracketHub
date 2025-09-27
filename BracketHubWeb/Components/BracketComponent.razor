@@ -120,7 +120,7 @@
 
 	private void FillExpectedMatches()
 	{
-		if (Matches == null && MemberList.IsNotNull() && MemberList.Count > 0)
+		if ((Matches == null || Matches.Count <= 0 ) && MemberList.IsNotNull() && MemberList.Count > 0)
 		{
 			Matches ??= new();
 
@@ -136,7 +136,7 @@
 				else if(currentMatch.Members != null)
 					currentMatch.Members = currentMatch.Members.Concat([0]).ToArray();
 
-				if (i == MemberList.Count || currentMatch.Members != null && currentMatch.Members.Length >= 2)
+				if (i == MemberList.Count-1 || currentMatch.Members != null && currentMatch.Members.Length >= 2)
 				{
 					Matches.Add(currentMatch);
 					currentMatch = null;
