@@ -12,11 +12,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-#if DEBUG
-            policy.WithOrigins("https://localhost:7140");
-#else
-            policy.WithOrigins("https://gregerdesign.dk");
-#endif
+            policy.WithOrigins(builder.Configuration.GetSection("CustomSettings").GetValue<string>("CorsBaseAddress") ?? "");
         });
 });
 builder.Services.AddControllers();

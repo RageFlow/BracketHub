@@ -18,9 +18,9 @@ namespace BracketHubWeb.Services
         internal string GetUrlWithQuery(string url, string? queryName = null, object? query = null)
         {
             if (!string.IsNullOrEmpty(queryName) && query.IsNotNull())
-                return $"/BracketHubAPI/BracketHub/{url}" + ($"?{queryName}={query}"); // This is a bad way, but will do for Demonstration.
+                return $"/BracketHub/{url}" + ($"?{queryName}={query}"); // This is a bad way, but will do for Demonstration.
             else
-                return $"/BracketHubAPI/BracketHub/{url}";
+                return $"/BracketHub/{url}";
         }
 
         //using HttpResponseMessage response = await httpClient.PostAsync("todos",jsonContent);

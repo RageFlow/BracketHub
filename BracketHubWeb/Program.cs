@@ -14,12 +14,8 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddHttpClient<APIClient>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(5);
-#if DEBUG
-    client.BaseAddress = new Uri("http://localhost:5017");
-#else
     //client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-    client.BaseAddress = new Uri("https://gregerdesign.dk");
-#endif
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("CustomSettings").GetValue<string>("APIBaseAddress") ?? "");
 });
 
 await builder.Build().RunAsync();
