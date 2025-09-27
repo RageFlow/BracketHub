@@ -127,8 +127,8 @@ namespace BracketHubWeb.Services
                 var existingMatch = Tournament.Matches?.FirstOrDefault(x => x.Id == match.Id);
                 if (!existingMatch.IsNotNull())
                 {
-                    Tournament.Matches ??= new();
-                    Tournament.Matches.Add(match);
+                    //Tournament.Matches ??= new();
+                    //Tournament.Matches.Add(match);
                 }
                 else
                 {
