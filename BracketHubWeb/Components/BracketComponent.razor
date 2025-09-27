@@ -89,7 +89,7 @@
 						foreach (MemberModel member in Tournament.Members)
 						{
 							<option checked="@(Member1 == member.Id)" value="@member.Id">
-								@member.Name
+								@member.Name - @member.Id
 							</option>
 						}
 					}
@@ -108,7 +108,7 @@
 							foreach (MemberModel member in Tournament.Members)
 							{
 								<option checked="@(Member2 == member.Id)" value="@member.Id">
-									@member.Name
+									@member.Name - @member.Id
 								</option>
 							}
 						}
@@ -123,14 +123,26 @@
 				@if (EditModel.IsNotNull() && Member1.IsNotNull() && Member2.IsNotNull())
 				{
 					<InputSelect TValue="int?" @bind-Value="EditModel.Winner">
+						<option checked="@(Member2 == null)" value="">
+							None
+						</option>
 						@if (Tournament?.Members != null)
 						{
-							<option checked="@(Member1 == EditModel.Winner)" value="@Member1">
-								@Tournament?.Members.FirstOrDefault(x => x.Id == Member1)?.Name
-							</option>
-							<option checked="@(Member2 == EditModel.Winner)" value="@Member2">
-								@Tournament?.Members.FirstOrDefault(x => x.Id == Member2)?.Name
-							</option>
+							var mem1 = Tournament?.Members.FirstOrDefault(x => x.Id == Member1);
+							var mem2 = Tournament?.Members.FirstOrDefault(x => x.Id == Member2);
+
+							if (mem1.IsNotNull())
+							{
+								<option checked="@(Member1 == EditModel.Winner)" value="@Member1">
+									@mem1?.Name - @mem1?.Id
+								</option>
+							}
+							if (mem1.IsNotNull())
+							{
+								<option checked="@(Member2 == EditModel.Winner)" value="@Member2">
+									@mem2?.Name - @mem2?.Id
+								</option>
+							}
 						}
 					</InputSelect>
 				}
@@ -187,6 +199,17 @@
 			if (Tournament.Matches.IsNotNull())
 			{
 				Matches = Tournament.Matches;
+				// Matches = new();
+				// Matches.Add(new MatchModel()
+				// {
+				// 	Id = 1,
+				// 	Status = Status.TBD,
+				// 	Round = 1,
+				// 	MatchNumber = 1,
+				// 	Members = [200,400],
+				// 	Winner = 1,
+				// 	ChildMatch = null
+				// });
 			}
 
 			MemberList = Tournament.Members?.ToDictionary(x => x.Id);
@@ -207,7 +230,7 @@
 
 	private void FillExpectedMatches()
 	{
-		if ((Matches == null || Matches.Count <= 0 ) && MemberList.IsNotNull() && MemberList.Count > 0)
+		if (MemberList.IsNotNull() && MemberList.Count > 0)
 		{
 			Matches ??= new();
 
@@ -219,13 +242,15 @@
 					checkCount--;
 			}
 
+			var highestCurrent = (Matches.Where(x => x.Round == 1).Select(x => x.MatchNumber).Max() ?? 0) * 2;
+
 			MatchModel? currentMatch = null;
-			int currentMatchId = 1;
-			for (int i = 0; i < checkCount; i++)
+			int currentMatchId = highestCurrent+1;
+			for (int i = highestCurrent; i < checkCount; i++)
 			{
 				if (!currentMatch.IsNotNull())
 				{
-					currentMatch = new MatchModel(0, Status.TBD, 1, currentMatchId, [0], null, null, null);
+					currentMatch = new MatchModel(0, Status.TBD, 1, currentMatchId, [0], null, null, null, Tournament?.Id);
 					currentMatchId++;
 				}
 				else if(currentMatch.Members != null)

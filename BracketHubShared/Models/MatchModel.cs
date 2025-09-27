@@ -5,7 +5,7 @@ namespace BracketHubShared.Models
     public class MatchModel
     {
         // Test
-        public MatchModel(int? id, Status status, int round, int? matchNumber, int[]? members, int[]? parentMatches, int? childMatch, int? winner)
+        public MatchModel(int? id, Status status, int round, int? matchNumber, int[]? members, int[]? parentMatches, int? childMatch, int? winner, int? tournament = null)
         {
             Id = id;
             Status = status;
@@ -13,6 +13,8 @@ namespace BracketHubShared.Models
             Round = round;
             MatchNumber = matchNumber;
             Winner = winner;
+
+            Tournament = tournament;
 
             // Links
             Members = members;
