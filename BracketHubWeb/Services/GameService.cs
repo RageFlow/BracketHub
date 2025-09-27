@@ -112,7 +112,7 @@ namespace BracketHubWeb.Services
             if (model.MemberId.IsNotNull() && model.TournamentId.IsNotNull())
             {
                 var tournament = await APIClient.AddTournamentMember(model);
-                Tournament = tournament;
+                await GetTournament();
                 return Tournament.IsNotNull();
             }
             return false;

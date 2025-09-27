@@ -84,12 +84,12 @@ namespace BracketHubWeb.Services
 
             return await CheckAndConvertResult<AdvancedTournamentModel?>(response);
         }
-        public async Task<AdvancedTournamentModel?> AddTournamentMember(TournamentMemberLink tournamentMemberLink, CancellationToken cancellationToken = default)
+        public async Task<bool> AddTournamentMember(TournamentMemberLink tournamentMemberLink, CancellationToken cancellationToken = default)
         {
             string url = GetUrlWithQuery(nameof(AddTournamentMember));
             using HttpResponseMessage response = await httpClient.PutAsync(url, SerializeModel(tournamentMemberLink), cancellationToken);
 
-            return await CheckAndConvertResult<AdvancedTournamentModel?>(response);
+            return response.IsSuccessStatusCode;
         }
 
 
