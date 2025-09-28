@@ -63,6 +63,7 @@ namespace BracketHubAPI.Controllers
                     Description = x.Description,
                     Matches = x.Matches != null ? x.Matches.Select(m => new MatchModel()
                     {
+                        Tournament = x.Id,
                         Id = m.Id,
                         Status = m.Status,
                         Round = m.Round,
@@ -170,6 +171,9 @@ namespace BracketHubAPI.Controllers
         [HttpPut(nameof(PutMatch))]
         public async Task<ActionResult<MatchModel?>> PutMatch([FromBody] MatchModel model, CancellationToken cancellationToken = default)
         {
+            if (!model.Tournament.IsNotNull() || model.Tournament <= 0)
+                return Conflict("Member is already a part of this Tournament!");
+
             using (var context = _contextFactory.CreateDbContext())
             {
                 // Include is very slow when a large amount of data needs to be fetched.
