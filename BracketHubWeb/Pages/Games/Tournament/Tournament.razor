@@ -83,6 +83,9 @@
 </div>
 
 @code {
+	[CascadingParameter]
+	public MainLayout? MainLayout { get; set; }
+
 	public static string NavigateMe(string type, int? id) => $"games/{type}/{id?.ToString() ?? "Unknown"}";
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -103,18 +106,25 @@
 
 	private async Task JoinTournament()
 	{
-		if (UserService.CurrentMember.IsNotNull() && GameService.Tournament.IsNotNull() && GameService.Tournament.Id.IsNotNull())
+		if (UserService.CurrentMember.IsNotNull())
 		{
-			var link = new TournamentMemberLink()
+			if (GameService.Tournament.IsNotNull() && GameService.Tournament.Id.IsNotNull())
+			{
+				var link = new TournamentMemberLink()
 				{
 					MemberId = UserService.CurrentMember.Id,
 					TournamentId = GameService.Tournament.Id.Value
 				};
 
-			if (await GameService.JoinTournament(link))
-			{
-				StateHasChanged();
+				if (await GameService.JoinTournament(link))
+				{
+					StateHasChanged();
+				}
 			}
+		}
+		else
+		{
+			MainLayout?.ToggleLogin(true);
 		}
 	}
 }

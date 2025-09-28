@@ -11,7 +11,9 @@
 
         <article class="content">
             <div id="scroll-to-top"></div>
-            @Body
+            <CascadingValue Value="this">
+                @Body
+            </CascadingValue>
         </article>
 
     </main>
