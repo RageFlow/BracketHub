@@ -67,21 +67,25 @@ namespace BracketHubWeb.Services
                 //Tournament.Matches = null;
                 //Tournament.Members = MemberModelStatics.MemberList.OrderBy(x => x.Nickname).Take(9).ToList();
 
-                //Tournament.Members = new()
-                //{
-                //    new MemberModel(1, "Julian", "Jugre"),
-                //    new MemberModel(2, "Dex", "Dex"),
-                //    new MemberModel(3, "Testing", "Teszt"),
-                //    new MemberModel(4, "Loo", "Lo"),
-                //    new MemberModel(5, "Wigg", "Jep"),
-                //};
+                Tournament.Members = new()
+                {
+                    new MemberModel(1, "Julian", "Jugre"),
+                    new MemberModel(2, "Dex", "Dex"),
+                    new MemberModel(3, "Testing", "Teszt"),
+                    new MemberModel(4, "Loo", "Lo"),
+                    new MemberModel(5, "Wigg", "Jep"),
+                    new MemberModel(6, "Trin", "CRTL"),
+                    new MemberModel(7, "HC", "DaneOne"),
+                    new MemberModel(8, "Marcus", "Ward"),
+                };
 
-                //Tournament.Matches = new()
-                //{
-                //    new MatchModel(1, Status.TBD, 1, 1, [1, 2], [], 7, null),
-                //    new MatchModel(2, Status.TBD, 1, 3, [3,4], [], 7, 3),
-                //    new MatchModel(7, Status.TBD, 2, 4, [1,3], [1,2], null, null)
-                //};
+                Tournament.Matches = new()
+                {
+                    new MatchModel(1, 1, 1, [1, 2], [], 7, 1),
+                    new MatchModel(2, 1, 2, [3,4], [], 7, 3),
+
+                    new MatchModel(7, 2, 1, [1,3], [1,2], null, 1)
+                };
             }
             return Tournament;
 #else

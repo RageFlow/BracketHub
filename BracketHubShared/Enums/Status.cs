@@ -2,11 +2,10 @@
 {
     public enum Status
     {
-        None,
+        TBD,
         Open,
         Closed,
         Running,
         Ended,
-        TBD
     }
 }

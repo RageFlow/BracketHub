@@ -199,22 +199,11 @@
 			if (Tournament.Matches.IsNotNull())
 			{
 				Matches = Tournament.Matches;
-				// Matches = new();
-				// Matches.Add(new MatchModel()
-				// {
-				// 	Id = 1,
-				// 	Status = Status.TBD,
-				// 	Round = 1,
-				// 	MatchNumber = 1,
-				// 	Members = [200,400],
-				// 	Winner = 1,
-				// 	ChildMatch = null
-				// });
 			}
 
 			MemberList = Tournament.Members?.ToDictionary(x => x.Id);
 
-			// Will only execute internal if no matches are present
+			// Add missing 1 round matches
 			FillExpectedMatches();
 		}
 
@@ -230,6 +219,8 @@
 
 	private void FillExpectedMatches()
 	{
+		int firstRound = 1;
+
 		if (MemberList.IsNotNull() && MemberList.Count > 0)
 		{
 			Matches ??= new();
@@ -238,59 +229,70 @@
 			// 1  2 & % 4 (Checking to fit correct amount of matches)
 			while (checkCount % 8 != 0 && checkCount > 0 && checkCount != 2 && checkCount != 4)
 				checkCount--;
-
-			var highestCurrent = (Matches.Where(x => x.Round == 1).Select(x => x.MatchNumber).Max() ?? 0) * 2;
+			// Will be double the number of matches (2 per match)
 
 			MatchModel? currentMatch = null;
-			int currentMatchId = highestCurrent+1;
-			for (int i = highestCurrent; i < checkCount; i++)
+
+			int matchNumber = 1; // Keeping track of each match
+			bool firstcheck = true;
+			for (int i = 1; i <= checkCount; i++)
 			{
 				if (!currentMatch.IsNotNull())
 				{
-					currentMatch = new MatchModel(null, Status.TBD, highestCurrent, currentMatchId, [0], null, null, null, Tournament?.Id);
-					currentMatchId++;
+					// Only get Round 1 matches
+					currentMatch = Matches.FirstOrDefault(x => x.Round == firstRound && x.MatchNumber == matchNumber);
+					// Set it as dummy if no match has been saved
+					currentMatch ??= new MatchModel(null, firstRound, matchNumber, [0], null, null, null, Tournament?.Id);
+					// Up MatchNumber
+					matchNumber++;
 				}
-				else if(currentMatch.Members != null)
+				// If match is not null and has less than 2 members
+				else if(currentMatch.Members.IsNotNull() && currentMatch.Members.Length < 2)
 					currentMatch.Members = currentMatch.Members.Concat([0]).ToArray();
 
-				if (i == MemberList.Count-1 || currentMatch.Members != null && currentMatch.Members.Length >= 2)
+				// if final iteration or if match.member length is more or equal to 2
+				if (i == checkCount || !firstcheck)
 				{
-					Matches.Add(currentMatch);
+					// Only add if not a valid (Existing match)
+					if (currentMatch.Id == null)
+						Matches.Add(currentMatch);
+
 					currentMatch = null;
 				}
+
+				firstcheck = !firstcheck;
 			}
 		}
 	}
 
-	private void CheckNext(List<MatchModel> matches, int round, int? maxNum = null)
+	private void CheckNext(List<MatchModel> matches, int round)
 	{
 		var currentMatches = matches.Where(x => x.Round == round).OrderBy(x => x.MatchNumber).ToList();
-
-		maxNum ??= currentMatches.Where(x => x.MatchNumber.IsNotNull()).Select(x => x.MatchNumber).Max();
 
 		if (currentMatches.Count <= 1)
 			return;
 
+		// Setup values
+		int maxNum = currentMatches.Count();
 		int nextRound = round + 1;
 
-		int matchNumber = maxNum ?? 0;
-		int expectedMax = matchNumber;
+		// Local values
+		int matchNumber = 1;
+		int expectedMax = 0;
 
 		int? singleMatch = null;
 		if (currentMatches.Count % 2 == 1)
 		{
-			expectedMax = matchNumber + (currentMatches.Count + 1) / 2;
+			expectedMax = (maxNum + 1) / 2;
 			singleMatch = expectedMax;
 		}
 		else
-		{
-			expectedMax = matchNumber + currentMatches.Count / 2;
-		}
+			expectedMax = maxNum / 2;
 
 		int currentChecked = 0;
-		for (matchNumber += 1; matchNumber <= expectedMax; matchNumber++)
+		for (matchNumber += 0; matchNumber <= expectedMax; matchNumber++)
 		{
-			var nextMatch = matches.FirstOrDefault(x => x.MatchNumber == matchNumber);
+			var nextMatch = matches.FirstOrDefault(x => x.Round == nextRound && x.MatchNumber == matchNumber);
 			if (!nextMatch.IsNotNull())
 			{
 				var num1 = currentMatches.ElementAtOrDefault(currentChecked)?.Id;
@@ -302,7 +304,7 @@
 					parents.Add(num2.Value);
 
 				// Set dummy match with TBD value for teams
-				nextMatch ??= new MatchModel(null, Status.TBD, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], parents.ToArray(), null, null, Tournament?.Id);
+				nextMatch ??= new MatchModel(null, nextRound, matchNumber, singleMatch == matchNumber ? [0] : [0, 0], parents.ToArray(), null, null, Tournament?.Id);
 				// Add dummy match (Based on invalid Id of 0)
 
 				matches.Add(nextMatch);
@@ -312,7 +314,7 @@
 
 		matchNumber--;
 
-		CheckNext(matches, nextRound, matchNumber);
+		CheckNext(matches, nextRound);
 	}
 
 	public void HideMenu()
