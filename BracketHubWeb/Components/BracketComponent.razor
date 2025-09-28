@@ -211,7 +211,7 @@
 		{
 			CheckNext(Matches, 1);
 
-			GroupedMatches = Matches.Where(x => x.Round != null).OrderBy(x => x.MatchNumber).GroupBy(x => x.Round ?? -1);
+			GroupedMatches = Matches.Where(x => x.Round != null).OrderBy(x => x.Round).OrderBy(x => x.MatchNumber).GroupBy(x => x.Round ?? -1);
 		}
 
 		base.OnInitialized();
