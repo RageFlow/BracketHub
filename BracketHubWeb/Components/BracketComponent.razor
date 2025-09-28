@@ -254,7 +254,7 @@
 				if (i == checkCount || !firstcheck)
 				{
 					// Only add if not a valid (Existing match)
-					if (currentMatch.Id == null)
+					if (!Matches.Any(x => x.Round == currentMatch.Round && x.MatchNumber == currentMatch.MatchNumber))
 						Matches.Add(currentMatch);
 
 					currentMatch = null;
