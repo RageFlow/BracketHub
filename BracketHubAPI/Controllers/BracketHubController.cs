@@ -184,7 +184,12 @@ namespace BracketHubAPI.Controllers
                     .Include(x => x.ParentMatches)
                     .Include(x => x.ChildMatch)
                     .Include(x => x.Tournament)
-                    .FirstOrDefaultAsync(x => x.Id == model.Id, cancellationToken);
+                    .Where(x => x.Id == model.Id ||
+                        x.Tournament != null && x.Tournament.Id == model.Tournament &&
+                        x.Round == model.Round &&
+                        x.MatchNumber == model.MatchNumber
+                    )
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 match ??= context.Matches.Add(new Match()).Entity;
 
