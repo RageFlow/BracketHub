@@ -1037,6 +1037,10 @@ a, button {
   text-decoration: none;
   font-size: inherit;
 }
+a[disabled], button[disabled] {
+  opacity: 0.8;
+  pointer-events: none;
+}
 
 button, .a-button {
   height: 36px;

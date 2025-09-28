@@ -81,10 +81,8 @@ namespace BracketHubWeb.Services
 
                 Tournament.Matches = new()
                 {
-                    new MatchModel(1, 1, 1, [1, 2], [], 7, 1),
-                    new MatchModel(2, 1, 2, [3,4], [], 7, 3),
-
-                    new MatchModel(7, 2, 1, [1,3], [1,2], null, 1)
+                    new MatchModel(1, 2, 2, [6,7], [], null, null),
+                    new MatchModel(2, 3, 1, [5], [], null, null)
                 };
             }
             return Tournament;

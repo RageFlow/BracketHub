@@ -148,7 +148,7 @@
 				}
 			</div>
 
-			<button @onclick="UpdateMatch">
+			<button @onclick="UpdateMatch" disabled="@CheckMembers">
 				Update
 			</button>
 		</div>
@@ -168,8 +168,9 @@
 	public bool AllowEditing { get; set; }
 
 	public MatchModel? EditModel { get; set; }
-	public int? Member1 { get; set; }
-	public int? Member2 { get; set; }
+	public int? Member1 { get; set; } = null;
+	public int? Member2 { get; set; } = null;
+	private bool CheckMembers => !(Member1.IsNotNull() && Member1 != 0 && Member2.IsNotNull() && Member2 != 0 && Member1 != Member2);
 
 	private List<MatchModel>? Matches { get; set; }
 
@@ -293,7 +294,17 @@
 		for (matchNumber += 0; matchNumber <= expectedMax; matchNumber++)
 		{
 			var nextMatch = matches.FirstOrDefault(x => x.Round == nextRound && x.MatchNumber == matchNumber);
-			if (!nextMatch.IsNotNull())
+			if (nextMatch.IsNotNull())
+			{
+				nextMatch.Members ??= [];
+				int memberCount = singleMatch != nextMatch.MatchNumber ? 2 : 1;
+				// Make sure that the correct amount of "members" is present
+				while (nextMatch.Members.Length < memberCount)
+				{
+					nextMatch.Members = nextMatch.Members.Concat([0]).ToArray();
+				}
+			}
+			else
 			{
 				var num1 = currentMatches.ElementAtOrDefault(currentChecked)?.Id;
 				var num2 = currentMatches.ElementAtOrDefault(currentChecked + 1)?.Id;
@@ -348,6 +359,13 @@
 				members.Add(Member1.Value);
 			if (Member2 != null)
 				members.Add(Member2.Value);
+
+			// Only allow for setting 2 members
+			if (!Member1.IsNotNull() || !Member2.IsNotNull())
+				return;
+
+			if (Member1 == Member2)
+				return;
 
 			EditModel.Tournament ??= Tournament?.Id;
 

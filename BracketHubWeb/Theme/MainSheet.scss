@@ -92,6 +92,11 @@ a, button {
     cursor: pointer;
     text-decoration: none;
     font-size: inherit;
+
+    &[disabled]{
+        opacity: 0.8;
+        pointer-events: none;
+    }
 }
 
 button, .a-button {
