@@ -135,6 +135,8 @@ namespace BracketHubWeb.Services
                 }
                 else
                 {
+                    existingMatch.Id = match.Id;
+                    existingMatch.Tournament = match.Tournament;
                     existingMatch.Status = match.Status;
                     existingMatch.Round = match.Round;
                     existingMatch.MatchNumber = match.MatchNumber;

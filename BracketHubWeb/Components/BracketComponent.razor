@@ -349,6 +349,9 @@
 
 			EditModel.Tournament ??= Tournament?.Id;
 
+			if (!EditModel.Tournament.IsNotNull())
+				throw new ArgumentNullException("Match is missing TournamentId");
+
 			EditModel.Members = members.ToArray();
 
 			var updated = await GameService.PutMatch(EditModel);

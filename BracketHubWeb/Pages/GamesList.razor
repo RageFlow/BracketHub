@@ -25,6 +25,7 @@
 		if (firstRender)
 		{
 			await GameService.GetGames();
+			StateHasChanged();
 		}
 
 		await base.OnAfterRenderAsync(firstRender);
