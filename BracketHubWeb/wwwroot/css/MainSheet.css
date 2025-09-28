@@ -631,7 +631,7 @@ form textarea[type=checkbox] {
   background: none;
 }
 .edit-tournament-data form .tournament-value.tournament-large {
-  min-height: 400px;
+  min-height: 200px;
   grid-column: span 2;
 }
 
@@ -756,10 +756,12 @@ form textarea[type=checkbox] {
 .bracket-component .bracket-component-view .bracket .bracket-list .round-match > a.winner {
   z-index: 1;
   border-left: 5px solid green;
+  width: calc(10rem - 5px);
 }
 .bracket-component .bracket-component-view .bracket .bracket-list .round-match > a.loser {
   z-index: 1;
   border-left: 5px solid red;
+  width: calc(10rem - 5px);
 }
 .bracket-component .bracket-component-view .bracket .bracket-list .round-match .exit {
   pointer-events: none;

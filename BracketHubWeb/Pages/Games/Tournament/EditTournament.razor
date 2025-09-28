@@ -92,14 +92,13 @@
 				</div>
 			</EditForm>
 
+			@if (TournamentModel.Id.IsNotNull())
+			{
+				<BracketComponent Tournament="TournamentModel" AllowEditing="true" />
+			}
 		}
 	</div>
 </div>
-
-@if (TournamentModel.IsNotNull())
-{
-	<BracketComponent Tournament="TournamentModel" AllowEditing="true" />
-}
 
 @code {
 	public static string NavigateMe(string type, int? id = null) => $"games/{type}/" + (id != null ? $"{id}/edit" : "newTournament");

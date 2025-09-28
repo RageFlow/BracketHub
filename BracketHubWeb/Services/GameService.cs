@@ -121,6 +121,9 @@ namespace BracketHubWeb.Services
 
         public async Task<bool> PutMatch(MatchModel model)
         {
+            if (model.Tournament == null)
+                return false;
+
             var match = await APIClient.PutMatch(model);
             if (Tournament != null && match != null)
             {

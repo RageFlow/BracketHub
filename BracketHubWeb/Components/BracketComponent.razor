@@ -235,12 +235,9 @@
 			Matches ??= new();
 
 			int checkCount = MemberList.Count;
-			// 1  2 & % 4
-			if (checkCount % 8 != 0 && checkCount != 2 && checkCount != 4)
-			{
-				while (checkCount % 8 != 0 || checkCount <= 0)
-					checkCount--;
-			}
+			// 1  2 & % 4 (Checking to fit correct amount of matches)
+			while (checkCount % 8 != 0 && checkCount > 0 && checkCount != 2 && checkCount != 4)
+				checkCount--;
 
 			var highestCurrent = (Matches.Where(x => x.Round == 1).Select(x => x.MatchNumber).Max() ?? 0) * 2;
 
@@ -349,6 +346,8 @@
 				members.Add(Member1.Value);
 			if (Member2 != null)
 				members.Add(Member2.Value);
+
+			EditModel.Tournament ??= Tournament?.Id;
 
 			EditModel.Members = members.ToArray();
 
