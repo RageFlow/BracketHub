@@ -29,8 +29,10 @@ namespace BracketHubAPI.Controllers
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return await context.Games.Where(x => x.Type == type)
+                return await context.Games
+                    .Where(x => x.Type == type)
                     .Select(x => new GameModel(x.Name, x.Type, x.Description))
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(cancellationToken);
             }
         }
@@ -40,7 +42,7 @@ namespace BracketHubAPI.Controllers
         {
             using (var context = _contextFactory.CreateDbContext())
             {
-                return await context.Games.Select(x => new GameModel(x.Name, x.Type, x.Description)).ToListAsync(cancellationToken);
+                return await context.Games.Select(x => new GameModel(x.Name, x.Type, x.Description)).AsNoTracking().ToListAsync(cancellationToken);
             }
         }
 #endregion
@@ -74,7 +76,7 @@ namespace BracketHubAPI.Controllers
                         ChildMatch = m.ChildMatch != null ? m.ChildMatch.Id : null
                     }).ToList() : null,
                     Members = x.Members != null ? x.Members.Select(m => new MemberModel(m.Id, m.Name, m.Nickname)).ToList() : null,
-                }).FirstOrDefaultAsync(cancellationToken);
+                }).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
             }
         }
         
@@ -94,7 +96,7 @@ namespace BracketHubAPI.Controllers
                         Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
-                    }).ToListAsync(cancellationToken);
+                    }).AsNoTracking().ToListAsync(cancellationToken);
                 }
                 else
                 {
@@ -107,7 +109,7 @@ namespace BracketHubAPI.Controllers
                         Banner = ImageStatics.GetCustomOrExistingBanner(x.Banner),
                         Date = x.Date,
                         IsPublic = x.IsPublic,
-                    }).Take(10).ToListAsync(cancellationToken);
+                    }).Take(10).AsNoTracking().ToListAsync(cancellationToken);
                 }
             }
         }
@@ -192,6 +194,7 @@ namespace BracketHubAPI.Controllers
                 match.Winner = model.Winner;
 
                 // Members - Bad way to set list, but for this scenario it should be fine
+
                 if (model.Members != null && model.Members.Length > 0)
                     match.Members = await context.Members.Where(x => model.Members.Contains(x.Id)).ToListAsync(cancellationToken);
                 else
@@ -204,16 +207,19 @@ namespace BracketHubAPI.Controllers
                     match.ParentMatches = null;
 
                 // Child match
-                if (model.ChildMatch != null && (!match.ChildMatch.IsNotNull() || match.ChildMatch.Id != model.ChildMatch))
+                if (model.ChildMatch != null)
                     match.ChildMatch = await context.Matches.FirstOrDefaultAsync(x => x.Id == model.ChildMatch, cancellationToken);
                 else
                     match.ChildMatch = null;
-                
+
                 // Tournament
-                if (model.Tournament != null && (!match.Tournament.IsNotNull() || match.Tournament.Id != model.Tournament))
-                    match.Tournament = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Tournament, cancellationToken);
-                else
-                    match.Tournament = null;
+                if (match.Tournament == null)
+                {
+                    if (model.Tournament != null)
+                        match.Tournament = await context.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Tournament, cancellationToken);
+                    else
+                        match.Tournament = null;
+                }
 
                 await context.SaveChangesAsync(cancellationToken);
 
