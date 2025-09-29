@@ -1,5 +1,6 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+html body, html button, html input, html select, html textarea, html h1, html h2, html h3, html p {
+    font-family: "Roboto", Arial, sans-serif !important;
 }
 
 #blazor-error-ui {
@@ -12,6 +13,7 @@ html, body {
     position: fixed;
     width: 100%;
     z-index: 1000;
+    color: black;
 }
 
     #blazor-error-ui .dismiss {

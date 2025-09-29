@@ -32,6 +32,7 @@
     <Folder Include="wwwroot\images\Icons\" />
     <Folder Include="wwwroot\images\Backgrounds\" />
     <Folder Include="wwwroot\images\Banners\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
   <ItemGroup>
