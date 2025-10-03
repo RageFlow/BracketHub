@@ -1,0 +1,103 @@
+/* /Components/SearchComponent.razor.rz.scp.css */
+
+.input-search-container[b-visn6hmyib] {
+    padding: 0.5rem;
+    background-color: var(--background-gray-1);
+    border-radius: var(--border-radius);
+    width: 320px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: text;
+
+    svg {
+        opacity: 0.7;
+        font-size: 1.0rem;
+    }
+
+    input[b-visn6hmyib] {
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        background: none;
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+
+        input[b-visn6hmyib]::-webkit-search-cancel-button {
+            position: relative;
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+        }
+
+        input[b-visn6hmyib]::-webkit-input-placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+            transition: 0.1s ease-in-out;
+        }
+
+        input:hover[b-visn6hmyib]::-webkit-input-placeholder {
+            opacity: 0.4;
+        }
+
+        input:focus[b-visn6hmyib]::-webkit-input-placeholder {
+            opacity: 0;
+        }
+
+    div button[b-visn6hmyib] {
+        position: absolute;
+        top: 0;
+        right: 56px;
+        bottom: 0;
+        cursor: pointer;
+        height: calc(100% - 10px);
+        margin: 5px;
+    }
+
+    div:last-of-type button[b-visn6hmyib] {
+        right: 0;
+    }
+
+    .input-clear[b-visn6hmyib] {
+        width: 25px;
+
+        button {
+            padding: 0 0.25rem;
+            background: none;
+            opacity: 0.7;
+            color: var(--text-muted);
+            border: none;
+        }
+    }
+
+    .input-submit[b-visn6hmyib] {
+        width: 40px;
+
+        button {
+            padding: 0 0.75rem;
+        }
+    }
+}
+/* /Pages/Home.razor.rz.scp.css */
+
+.page-home-top-section[b-hcpcnb8chx] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4rem;
+
+    h2 {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 8rem;
+        margin-bottom: 3rem;
+    }
+
+    p[b-hcpcnb8chx] {
+        width: 500px;
+        max-width: 100%;
+        text-align: center;
+    }
+}
